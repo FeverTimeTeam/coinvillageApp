@@ -19,6 +19,8 @@ target 'coinvillageApp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'coinvillageAppTests' do
     inherit! :complete
     # Pods for testing

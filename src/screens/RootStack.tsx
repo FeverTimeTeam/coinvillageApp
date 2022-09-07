@@ -7,6 +7,7 @@ import PassbookScreen from './passbook/PassbookScreen';
 import BasePassbookScreen from './passbook/BasePassbookScreen';
 import InstallmentPassbookScreen from './passbook/InstallmentPassbookScreen';
 import StockPassbookScreen from './passbook/StockPassbookScreen';
+import ConsumeScreen from './passbook/ConsumeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,13 +17,31 @@ const RootStack = () => {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Job" component={JobScreen} />
       <Stack.Screen name="Investment" component={InvestmentScreen} />
-      <Stack.Screen name="Passbook" component={PassbookScreen} />
-      <Stack.Screen name="BasePassbook" component={BasePassbookScreen} />
+      <Stack.Screen
+        name="Passbook"
+        component={PassbookScreen}
+        options={{title: '통장'}}
+      />
+      <Stack.Screen
+        name="BasePassbook"
+        component={BasePassbookScreen}
+        options={{title: '입출금 통장'}}
+      />
       <Stack.Screen
         name="InstallmentPassbook"
         component={InstallmentPassbookScreen}
+        options={{title: '적금 통장'}}
       />
-      <Stack.Screen name="StockPassbook" component={StockPassbookScreen} />
+      <Stack.Screen
+        name="StockPassbook"
+        component={StockPassbookScreen}
+        options={{title: '주식 통장'}}
+      />
+      <Stack.Screen
+        name="Consume"
+        component={ConsumeScreen}
+        options={{title: '입출금 통장'}}
+      />
     </Stack.Navigator>
   );
 };

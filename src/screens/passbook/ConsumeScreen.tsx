@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const BasePassbookScreen = () => {
+const ConsumeScreen = () => {
   return (
     <View style={styles.block}>
-      <Text>입출금통장</Text>
+      <Text>소비하기 페이지</Text>
     </View>
   );
 };
@@ -13,4 +13,4 @@ const styles = StyleSheet.create({
   block: {},
 });
 
-export default BasePassbookScreen;
+export default ConsumeScreen;

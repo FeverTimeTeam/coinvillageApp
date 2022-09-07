@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, View, Button} from 'react-native';
+import PassbookButton from '../components/PassbookButton';
 
 const HomeScreen = () => {
   const navigation = useNavigation();

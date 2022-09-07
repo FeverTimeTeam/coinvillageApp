@@ -11,6 +11,7 @@ import {
 
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
+import PassbookButton from '../../components/PassbookButton';
 
 const BasePassbookScreen = () => {
   const navigation = useNavigation();
@@ -187,18 +188,12 @@ const BasePassbookScreen = () => {
         </View>
         <View style={styles.separatorBar} />
         <View style={styles.consumeButtonWrapper}>
-          <Pressable
-            style={({pressed}) => [
-              styles.consumeButton,
-              Platform.OS === 'ios' &&
-                pressed && {backgroundColor: color.light_gray},
-            ]}
-            android_ripple={{color: '#ededed'}}
+          <PassbookButton
+            buttonText="소비하기"
             onPress={() => {
               navigation.navigate('Consume');
-            }}>
-            <Text style={styles.consumeButtonText}>소비하기</Text>
-          </Pressable>
+            }}
+          />
         </View>
         <View style={styles.separatorBar} />
         <FlatList

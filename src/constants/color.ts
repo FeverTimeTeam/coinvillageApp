@@ -21,6 +21,7 @@ const color = {
   light_yellow: '#FFEEBF',
   apricot: '#FF8B49',
   light_apricot: '#FFE1D1',
+  sky_blue: '#C3D4FF',
 };
 
 export default color;

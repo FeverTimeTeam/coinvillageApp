@@ -38,7 +38,7 @@ const styles = (value: {textColor: string; backgroundColor: string}) =>
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: `${color.light_yellow}`,
+      backgroundColor: value.backgroundColor,
       borderRadius: 15,
     },
     buttonText: {

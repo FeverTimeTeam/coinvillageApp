@@ -19,6 +19,8 @@ const color = {
   inactive: '#E3E3E3',
   blue: '#428EFF',
   light_yellow: '#FFEEBF',
+  apricot: '#FF8B49',
+  light_apricot: '#FFE1D1',
 };
 
 export default color;

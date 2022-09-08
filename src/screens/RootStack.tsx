@@ -16,7 +16,11 @@ const RootStack = () => {
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Job" component={JobScreen} />
+      <Stack.Screen
+        name="Job"
+        component={JobScreen}
+        options={{title: '직업'}}
+      />
       <Stack.Screen name="Investment" component={InvestmentScreen} />
       <Stack.Screen
         name="Passbook"

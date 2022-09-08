@@ -5,7 +5,7 @@ import WebView from 'react-native-webview';
 const WebViewContainer = () => {
   return (
     <WebView
-      source={{uri: 'https://phenomenal-dasik-bd2db1.netlify.app/'}}
+      source={{uri: 'https://coinvillage.netlify.app/'}}
       style={{marginTop: 0}}
     />
   );

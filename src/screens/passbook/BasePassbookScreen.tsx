@@ -186,7 +186,6 @@ const BasePassbookScreen = () => {
           <Text style={styles.balanceText}>현재 잔액</Text>
           <Text style={styles.balanceMoneyText}>{balance}미소</Text>
         </View>
-        <View style={styles.separatorBar} />
         <View style={styles.consumeButtonWrapper}>
           <PassbookButton
             buttonText="소비하기"
@@ -222,7 +221,6 @@ const BasePassbookScreen = () => {
         />
       </View>
     </View>
-    // <WebViewContainer />
   );
 };
 
@@ -247,7 +245,7 @@ const styles = StyleSheet.create({
   },
   separatorBar: {
     height: 7,
-    backgroundColor: `${color.light_gray2}`,
+    backgroundColor: `${color.light_gray3}`,
   },
   detailContentList: {},
   detailContentContainer: {

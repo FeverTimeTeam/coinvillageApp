@@ -21,153 +21,43 @@ const BasePassbookScreen = () => {
     date: number;
   };
   type basePassbookDetail = {
-    itemId: number;
-    contentName: string;
-    money: number;
-    moneyState: 'Withdrawal' | 'Deposit';
-    createdDate: fullDate;
+    accountId: number;
+    content: string;
+    total: number;
+    state: 'Withdrawal' | 'Deposit';
+    createdAt: fullDate;
   };
   const [basePassbookDetailList, setBasePassbookDetailList] = useState<
     basePassbookDetail[]
   >([
     {
-      itemId: 0,
-      contentName: '지우개',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
+      accountId: 0,
+      content: '지우개',
+      total: 2,
+      state: 'Withdrawal',
+      createdAt: {
         year: new Date().getFullYear() + 1,
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
       },
     },
     {
-      itemId: 1,
-      contentName: '월급',
-      money: 100,
-      moneyState: 'Deposit',
-      createdDate: {
+      accountId: 1,
+      content: '월급',
+      total: 100,
+      state: 'Deposit',
+      createdAt: {
         year: new Date().getFullYear() + 1,
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
       },
     },
     {
-      itemId: 2,
-      contentName: '그립톡',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 3,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 4,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 5,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 6,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 7,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 8,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 9,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 10,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 11,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 12,
-      contentName: '빗',
-      money: 2,
-      moneyState: 'Withdrawal',
-      createdDate: {
+      accountId: 1,
+      content: '전기세',
+      total: 10,
+      state: 'Withdrawal',
+      createdAt: {
         year: new Date().getFullYear() + 1,
         month: new Date().getMonth() + 1,
         date: new Date().getDate(),
@@ -199,20 +89,20 @@ const BasePassbookScreen = () => {
           style={styles.detailContentList}
           data={basePassbookDetailList}
           renderItem={({item}) => (
-            <View style={styles.detailContentContainer} key={item.itemId}>
+            <View style={styles.detailContentContainer} key={item.accountId}>
               <View style={styles.dateContainer}>
-                <Text style={styles.date}>{item.createdDate.month}월</Text>
-                <Text style={styles.date}>{item.createdDate.date}일</Text>
+                <Text style={styles.date}>{item.createdAt.month}월</Text>
+                <Text style={styles.date}>{item.createdAt.date}일</Text>
               </View>
               <View style={styles.contentContainer}>
-                <Text style={styles.contentName}>{item.contentName}</Text>
-                {item.moneyState === 'Withdrawal' ? (
+                <Text style={styles.contentName}>{item.content}</Text>
+                {item.state === 'Withdrawal' ? (
                   <Text style={[styles.money, styles.withdrawal]}>
-                    -{item.money}
+                    -{item.total}
                   </Text>
                 ) : (
                   <Text style={[styles.money, styles.deposit]}>
-                    +{item.money}
+                    +{item.total}
                   </Text>
                 )}
               </View>

@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import color from '../../constants/color';
 import ModalSelector from 'react-native-modal-selector';
 
@@ -19,6 +26,7 @@ const InstallmentSettingScreen = () => {
     // Can also add additional custom keys which are passed to the onChange callback
     {key: index++, label: '금요일', customKey: 'Not a fruit'},
   ];
+  const [radioSelected, setRadioSelected] = useState<'week' | 'month'>('week');
   return (
     <View style={styles.block}>
       <View style={styles.termContainer}>
@@ -33,47 +41,75 @@ const InstallmentSettingScreen = () => {
       <View style={styles.radioListContainer}>
         <View style={styles.radioContainer}>
           <View style={styles.radioButtonContainer}>
-            <Image
-              style={styles.radioButton}
-              source={require('../../assets/images/radio_active.png')}
-            />
-            <Text style={styles.selectText}>매주(일주일 단위)</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setRadioSelected('week');
+              }}>
+              {radioSelected === 'week' ? (
+                <Image
+                  style={styles.radioButton}
+                  source={require('../../assets/images/radio_active.png')}
+                />
+              ) : (
+                <Image
+                  style={styles.radioButton}
+                  source={require('../../assets/images/radio_inactive.png')}
+                />
+              )}
+            </TouchableOpacity>
+            <Text style={styles.selectText}>매주 (일주일 단위)</Text>
           </View>
-          <View style={styles.selectContentContainer}>
-            <ModalSelector
-              style={styles.select}
-              data={data}
-              initValue="요일 선택"
-              onChange={option => {
-                alert(`${option.label} (${option.key})을 선택하셨습니다.`);
-              }}
-            />
-            <Text style={styles.selectText}>금액</Text>
-            <TextInput style={styles.input} />
-            <Text style={styles.selectText}>미소씩</Text>
-          </View>
+          {radioSelected === 'week' && (
+            <View style={styles.selectContentContainer}>
+              <ModalSelector
+                style={styles.select}
+                data={data}
+                initValue="요일 선택"
+                onChange={option => {
+                  alert(`${option.label} (${option.key})을 선택하셨습니다.`);
+                }}
+              />
+              <Text style={styles.selectText}>금액</Text>
+              <TextInput style={styles.input} />
+              <Text style={styles.selectText}>미소씩</Text>
+            </View>
+          )}
         </View>
         <View style={styles.radioContainer}>
           <View style={styles.radioButtonContainer}>
-            <Image
-              style={styles.radioButton}
-              source={require('../../assets/images/radio_active.png')}
-            />
-            <Text style={styles.selectText}>매주(일주일 단위)</Text>
+            <TouchableOpacity
+              onPress={() => {
+                setRadioSelected('month');
+              }}>
+              {radioSelected === 'month' ? (
+                <Image
+                  style={styles.radioButton}
+                  source={require('../../assets/images/radio_active.png')}
+                />
+              ) : (
+                <Image
+                  style={styles.radioButton}
+                  source={require('../../assets/images/radio_inactive.png')}
+                />
+              )}
+            </TouchableOpacity>
+            <Text style={styles.selectText}>매월 (한 달 단위)</Text>
           </View>
-          <View style={styles.selectContentContainer}>
-            <ModalSelector
-              style={styles.select}
-              data={data}
-              initValue="날짜 선택"
-              onChange={option => {
-                alert(`${option.label} (${option.key})을 선택하셨습니다.`);
-              }}
-            />
-            <Text style={styles.selectText}>금액</Text>
-            <TextInput style={styles.input} />
-            <Text style={styles.selectText}>미소씩</Text>
-          </View>
+          {radioSelected === 'month' && (
+            <View style={styles.selectContentContainer}>
+              <ModalSelector
+                style={styles.select}
+                data={data}
+                initValue="날짜 선택"
+                onChange={option => {
+                  alert(`${option.label} (${option.key})을 선택하셨습니다.`);
+                }}
+              />
+              <Text style={styles.selectText}>금액</Text>
+              <TextInput style={styles.input} />
+              <Text style={styles.selectText}>미소씩</Text>
+            </View>
+          )}
         </View>
       </View>
     </View>

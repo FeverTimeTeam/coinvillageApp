@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {
   Alert,
   Image,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -9,6 +10,7 @@ import {
 } from 'react-native';
 import color from '../constants/color';
 import CardFlip from 'react-native-card-flip';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 const JobScreen = () => {
   type nation = {
@@ -24,6 +26,26 @@ const JobScreen = () => {
     paycheck: 13204000,
   });
 
+  const [response, setResponse] = useState<any>(null);
+
+  const onSelectImage = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        maxWidth: 512,
+        maxHeight: 512,
+        includeBase64: Platform.OS === 'android',
+      },
+      res => {
+        if (res.didCancel) {
+          return;
+        }
+        setResponse(res);
+        console.log(res);
+      },
+    );
+  };
+
   return (
     <View style={styles.block}>
       <CardFlip
@@ -33,16 +55,25 @@ const JobScreen = () => {
         <TouchableOpacity
           style={[styles.card, styles.cardFront]}
           onPress={() => this.card.flip()}>
-          <Image source={require('../assets/images/profile.png')} />
+          <Image
+            style={styles.circle}
+            source={
+              response
+                ? {uri: response?.assets[0]?.uri}
+                : require('../assets/images/profile.png')
+            }
+          />
           <Text style={[styles.text, styles.bold, styles.name]}>
             {nationInfo.name}
           </Text>
           <Text style={[styles.text, styles.jobName]}>
             {nationInfo.jobName}
           </Text>
-          <View style={styles.settingButtonWrapper}>
+          <TouchableOpacity
+            style={styles.settingButtonWrapper}
+            onPress={onSelectImage}>
             <Image source={require('../assets/images/setting_white.png')} />
-          </View>
+          </TouchableOpacity>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.card, styles.cardBack]}
@@ -76,6 +107,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 35,
   },
+  circle: {
+    backgroundColor: `${color.deep}`,
+    borderRadius: 128,
+    width: 256,
+    height: 256,
+  },
   text: {
     color: `${color.white}`,
   },
@@ -98,7 +135,7 @@ const styles = StyleSheet.create({
   },
   cardFront: {
     backgroundColor: `${color.sky_blue}`,
-    paddingTop: 95,
+    paddingTop: 80,
     paddingBottom: 29,
   },
   cardBack: {

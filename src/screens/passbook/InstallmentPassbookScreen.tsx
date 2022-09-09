@@ -94,9 +94,7 @@ const InstallmentPassbookScreen = () => {
             textColor={color.apricot}
             backgroundColor={color.light_apricot}
             buttonText="저축하기"
-            onPress={() => {
-              navigation.navigate('Consume');
-            }}
+            onPress={() => {}}
           />
         </View>
         <View style={styles.separatorBar} />

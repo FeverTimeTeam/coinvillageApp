@@ -9,6 +9,8 @@ import InstallmentPassbookScreen from './passbook/InstallmentPassbookScreen';
 import StockPassbookScreen from './passbook/StockPassbookScreen';
 import ConsumeScreen from './passbook/ConsumeScreen';
 import InstallmentSettingScreen from './passbook/InstallmentSettingScreen';
+import LoginScreen from './LoginScreen';
+import LogoutScreen from './LogoutScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +18,20 @@ const RootStack = () => {
   return (
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Logout"
+        component={LogoutScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="Job"
         component={JobScreen}

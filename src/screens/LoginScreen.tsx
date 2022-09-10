@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {axiosInstance} from '../queries/index';
 import {useNavigation} from '@react-navigation/native';
@@ -15,16 +16,20 @@ import {authState} from '../atoms/auth';
 import {useRecoilState} from 'recoil';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import color from '../constants/color';
+import {Platform} from 'react-native';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [authUserState, setAuthUserState] = useRecoilState(authState);
 
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
   const login = () => {
     axiosInstance
       .post('/members/authenticate', {
-        email: 'mycom@naver.com',
-        password: 'string',
+        email: email,
+        password: password,
       })
       .then(response => {
         console.log(JSON.stringify(response.data.memberResponseDto));
@@ -40,7 +45,9 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.block}>
+    <KeyboardAvoidingView
+      style={styles.block}
+      behavior={Platform.select({ios: 'padding'})}>
       <View style={styles.covilContainer}>
         <Image
           style={styles.covilImage}
@@ -49,33 +56,47 @@ const LoginScreen = () => {
         <Text style={styles.covilDescription}>당신의 코인 빌리지</Text>
       </View>
       <View>
-        <Text>아이디</Text>
-        <TextInput placeholder="아이디 입력" />
-        <Text>비밀번호</Text>
-        <TextInput placeholder="비밀번호 입력" />
+        <Text style={styles.inputTitle}>아이디</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="이메일 입력"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <Text style={styles.inputTitle}>비밀번호</Text>
+        <TextInput
+          style={styles.input}
+          secureTextEntry={true}
+          placeholder="비밀번호 입력"
+          value={password}
+          onChangeText={setPassword}
+        />
       </View>
       <TouchableOpacity
         style={styles.loginButton}
         onPress={() => {
           login();
+          setEmail('');
+          setPassword('');
         }}>
         <Text style={styles.loginText}>로그인</Text>
       </TouchableOpacity>
-      <View>
-        <Text>아직 회원이 아니신가요?</Text>
-        <TouchableOpacity>
-          <Text>회원가입하기</Text>
+      <View style={styles.signupContainer}>
+        <Text style={styles.signUpDescriptionText}>
+          아직 회원이 아니신가요?
+        </Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('SignUp');
+            setEmail('');
+            setPassword('');
+          }}>
+          <Text style={styles.signUpText}> 회원가입하기</Text>
         </TouchableOpacity>
       </View>
-      {authUserState.user ? (
-        <View>
-          <Text>로그인됨</Text>
-          <Text>{authUserState.user?.email}</Text>
-        </View>
-      ) : (
-        <Text>로그아웃됨</Text>
-      )}
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -99,6 +120,16 @@ const styles = StyleSheet.create({
     color: `${color.kb}`,
     fontSize: 20,
   },
+  inputTitle: {
+    fontSize: 16,
+  },
+  input: {
+    fontSize: 16,
+    height: 45,
+    borderBottomWidth: 1,
+    borderBottomColor: `${color.light_gray}`,
+    marginBottom: 25,
+  },
   loginButton: {
     display: 'flex',
     justifyContent: 'center',
@@ -111,6 +142,19 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: `${color.white}`,
+  },
+  signupContainer: {
+    marginTop: 13,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  signUpDescriptionText: {
+    color: `${color.warm_gray1}`,
+  },
+  signUpText: {
+    color: `${color.warm_gray1}`,
+    textDecorationLine: 'underline',
   },
 });
 

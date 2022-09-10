@@ -11,8 +11,15 @@ import {
 import color from '../constants/color';
 import CardFlip from 'react-native-card-flip';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {useRecoilState} from 'recoil';
+import {authState} from '../atoms/auth';
+import {jobProfileState} from '../atoms/jobProfile';
+import {useEffect} from 'react';
 
 const JobScreen = () => {
+  const [authUserState, setAuthUserState] = useRecoilState(authState);
+  const [profileState, setProfileState] = useRecoilState(jobProfileState);
+
   type nation = {
     name: string;
     jobName: string;
@@ -41,7 +48,9 @@ const JobScreen = () => {
           return;
         }
         setResponse(res);
-        console.log(res);
+        setProfileState({uri: res?.assets[0]?.uri});
+
+        console.log(res?.assets[0].uri);
       },
     );
   };
@@ -59,7 +68,7 @@ const JobScreen = () => {
             style={styles.circle}
             source={
               response
-                ? {uri: response?.assets[0]?.uri}
+                ? {uri: profileState.uri}
                 : require('../assets/images/profile.png')
             }
           />

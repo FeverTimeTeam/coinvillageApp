@@ -7,6 +7,7 @@ export interface User {
   nickname: string;
   phoneNumber: string;
   property: number;
+  countryName: string;
   authorityDtoSet: [
     {
       authorityName: 'ROLE_NATION' | 'ROLE_RULER';

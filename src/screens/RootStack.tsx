@@ -11,6 +11,7 @@ import ConsumeScreen from './passbook/ConsumeScreen';
 import InstallmentSettingScreen from './passbook/InstallmentSettingScreen';
 import LoginScreen from './LoginScreen';
 import LogoutScreen from './LogoutScreen';
+import SignUpScreen from './SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,13 @@ const RootStack = () => {
         options={{
           headerShown: false,
         }}
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        // options={{
+        //   headerShown: false,
+        // }}
       />
       <Stack.Screen
         name="Job"

@@ -13,6 +13,9 @@ export interface User {
       authorityName: 'ROLE_NATION' | 'ROLE_RULER';
     },
   ];
+  jobName: string;
+  jobContent: string;
+  payCheck: number;
 }
 
 interface AuthState {

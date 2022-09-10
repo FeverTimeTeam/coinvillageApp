@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: `${color.white}`,
+    // backgroundColor: `${color.white}`,
     height: 70,
     paddingLeft: 19,
     paddingRight: 22,
@@ -81,12 +81,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: `${color.warm_gray1}`,
+    // backgroundColor: `${color.white}`,
+    borderWidth: 2,
+    borderColor: `${color.warm_gray1}`,
   },
   loginText: {
     fontWeight: 'bold',
     fontSize: 16,
-    color: `${color.white}`,
+    color: `${color.warm_gray1}`,
   },
 });
 

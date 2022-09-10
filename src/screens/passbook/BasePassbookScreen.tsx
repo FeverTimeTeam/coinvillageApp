@@ -8,62 +8,42 @@ import {
   Text,
   View,
 } from 'react-native';
-
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import PassbookButton from '../../components/PassbookButton';
+import {axiosInstance} from '../../queries/index';
+import {basePassbookState} from '../../atoms/basePassbook';
+import {useRecoilState} from 'recoil';
 
 const BasePassbookScreen = () => {
   const navigation = useNavigation();
-  type fullDate = {
-    year: number;
-    month: number;
-    date: number;
+  const [basePassbookListState, setBasePassbookListState] =
+    useRecoilState(basePassbookState);
+
+  const getBasePassbookList = () => {
+    axiosInstance
+      .get('/accounts')
+      .then(response => {
+        // console.log(response.data);
+        setBasePassbookListState({items: response.data});
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
-  type basePassbookDetail = {
-    accountId: number;
-    content: string;
-    total: number;
-    state: 'Withdrawal' | 'Deposit';
-    createdAt: fullDate;
-  };
-  const [basePassbookDetailList, setBasePassbookDetailList] = useState<
-    basePassbookDetail[]
-  >([
-    {
-      accountId: 0,
-      content: '지우개',
-      total: 2,
-      state: 'Withdrawal',
-      createdAt: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      accountId: 1,
-      content: '월급',
-      total: 100,
-      state: 'Deposit',
-      createdAt: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      accountId: 1,
-      content: '전기세',
-      total: 10,
-      state: 'Withdrawal',
-      createdAt: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-  ]);
+
+  useEffect(() => {
+    getBasePassbookList();
+  }, []);
+
+  useEffect(() => {
+    basePassbookListState.items &&
+      basePassbookListState.items.map(item => {
+        console.log(item.content);
+        console.log(item.total);
+      });
+  }, [basePassbookListState]);
+
   const [balance, setBalance] = useState<number>(0);
   useEffect(() => {
     let dd = new Date();
@@ -87,22 +67,21 @@ const BasePassbookScreen = () => {
         <View style={styles.separatorBar} />
         <FlatList
           style={styles.detailContentList}
-          data={basePassbookDetailList}
+          data={basePassbookListState.items}
           renderItem={({item}) => (
             <View style={styles.detailContentContainer} key={item.accountId}>
               <View style={styles.dateContainer}>
-                <Text style={styles.date}>{item.createdAt.month}월</Text>
-                <Text style={styles.date}>{item.createdAt.date}일</Text>
+                <Text style={styles.date}>{item.createdAt}</Text>
               </View>
               <View style={styles.contentContainer}>
                 <Text style={styles.contentName}>{item.content}</Text>
-                {item.state === 'Withdrawal' ? (
-                  <Text style={[styles.money, styles.withdrawal]}>
-                    -{item.total}
+                {item.state === 'DEPOSIT' ? (
+                  <Text style={[styles.money, styles.deposit]}>
+                    {item.total}
                   </Text>
                 ) : (
-                  <Text style={[styles.money, styles.deposit]}>
-                    +{item.total}
+                  <Text style={[styles.money, styles.withdrawal]}>
+                    {item.total}
                   </Text>
                 )}
               </View>

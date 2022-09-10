@@ -19,7 +19,6 @@ const HomeScreen = () => {
           style={styles.world}
           resizeMode="contain"
         />
-        {/* <View style={styles.shadow} /> */}
         <Image
           source={require('../assets/images/world_shadow.png')}
           style={styles.shadow}
@@ -61,6 +60,7 @@ const styles = StyleSheet.create({
   world: {
     width: '100%',
     height: 390,
+    zIndex: 3,
   },
   shadow: {
     position: 'absolute',

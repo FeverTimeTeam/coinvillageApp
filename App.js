@@ -2,6 +2,7 @@ import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import RootStack from './src/screens/RootStack';
 import SplashScreen from 'react-native-splash-screen';
+import {RecoilRoot} from 'recoil';
 
 const App = () => {
   useEffect(() => {
@@ -15,9 +16,11 @@ const App = () => {
     }
   }, []);
   return (
-    <NavigationContainer>
-      <RootStack />
-    </NavigationContainer>
+    <RecoilRoot>
+      <NavigationContainer>
+        <RootStack />
+      </NavigationContainer>
+    </RecoilRoot>
   );
 };
 

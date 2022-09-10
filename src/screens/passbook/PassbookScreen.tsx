@@ -8,11 +8,15 @@ import {
   Text,
   Image,
   Button,
+  ImageBackground,
 } from 'react-native';
 import color from '../../constants/color';
+import {useRecoilState} from 'recoil';
+import {authState} from '../../atoms/auth';
 
 const PassbookScreen = () => {
   const navigation = useNavigation();
+  const [authUserState, setAuthUserState] = useRecoilState(authState);
   return (
     <View style={styles.block}>
       <View style={styles.informationTextContainer}>
@@ -33,7 +37,15 @@ const PassbookScreen = () => {
         onPress={() => {
           navigation.push('BasePassbook');
         }}>
-        <Image source={require('../../assets/images/savingsAccount.png')} />
+        <ImageBackground
+          style={styles.imageBackground}
+          source={require('../../assets/images/savingsAccount.png')}
+          resizeMode="contain">
+          <Text style={[styles.country, {color: color.kb}]}>
+            {authUserState.user?.countryName} 은행
+          </Text>
+          <Text style={styles.username}>{authUserState.user?.nickname}님</Text>
+        </ImageBackground>
       </Pressable>
       <Pressable
         style={({pressed}) => [
@@ -45,7 +57,15 @@ const PassbookScreen = () => {
         onPress={() => {
           navigation.push('InstallmentPassbook');
         }}>
-        <Image source={require('../../assets/images/installmentAccount.png')} />
+        <ImageBackground
+          style={styles.imageBackground}
+          source={require('../../assets/images/installmentAccount.png')}
+          resizeMode="contain">
+          <Text style={[styles.country, {color: color.apricot}]}>
+            {authUserState.user?.countryName} 은행
+          </Text>
+          <Text style={styles.username}>{authUserState.user?.nickname}님</Text>
+        </ImageBackground>
       </Pressable>
       <Pressable
         style={({pressed}) => [
@@ -57,7 +77,15 @@ const PassbookScreen = () => {
         onPress={() => {
           navigation.push('StockPassbook');
         }}>
-        <Image source={require('../../assets/images/investmentAccount.png')} />
+        <ImageBackground
+          style={styles.imageBackground}
+          source={require('../../assets/images/investmentAccount.png')}
+          resizeMode="contain">
+          <Text style={[styles.country, {color: color.light_green}]}>
+            {authUserState.user?.countryName} 은행
+          </Text>
+          <Text style={styles.username}>{authUserState.user?.nickname}님</Text>
+        </ImageBackground>
       </Pressable>
     </View>
   );
@@ -67,10 +95,28 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
   },
   passbookButton: {
     marginTop: 15,
+  },
+  imageBackground: {
+    width: 343,
+    height: 178,
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    padding: 22,
+  },
+  country: {
+    // color: `${color.kb}`,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  username: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: `${color.deep}`,
   },
   button: {
     height: 10,

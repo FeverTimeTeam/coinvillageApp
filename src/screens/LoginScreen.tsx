@@ -34,7 +34,7 @@ const LoginScreen = () => {
       .then(response => {
         console.log(JSON.stringify(response.data.memberResponseDto));
         console.log(response.data.token);
-        authStorage.set(response.data.memberResponseDto);
+        authStorage.set(response.data);
         setAuthUserState({user: response.data.memberResponseDto});
         axiosInstance.defaults.headers.Authorization = `Bearer ${response.data.token}`;
         navigation.pop();

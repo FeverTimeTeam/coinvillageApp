@@ -9,11 +9,11 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.block}>
-      <Header />
       <LinearGradient
         colors={['#6DC3DF', '#FFFCB7']}
         locations={[0, 0.5]}
-        style={styles.block}>
+        style={styles.inner}>
+        <Header />
         <Image
           source={require('../assets/images/world.png')}
           style={styles.world}
@@ -56,6 +56,10 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+  },
+  inner: {
+    flex: 1,
+    paddingTop: 50,
   },
   world: {
     width: '100%',

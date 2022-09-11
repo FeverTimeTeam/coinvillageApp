@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   NativeModules,
+  Alert,
 } from 'react-native';
 import {axiosInstance} from '../queries/index';
 import {useNavigation} from '@react-navigation/native';
@@ -42,6 +43,15 @@ const LoginScreen = () => {
       })
       .catch(e => {
         console.log(e);
+        Alert.alert('로그인 실패!', '아이디, 비밀번호가 일치하지 않습니다.', [
+          {
+            text: '확인',
+            onPress: () => {
+              // navigation.pop();
+            },
+            style: 'destructive',
+          },
+        ]);
       });
   };
 

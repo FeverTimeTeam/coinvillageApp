@@ -28,7 +28,6 @@ const SavingsPassbookScreen = () => {
     axiosInstance
       .get('/savings')
       .then(response => {
-        console.log('hi');
         console.log(response.data);
         setSavingsPassbookList({items: response.data});
       })
@@ -88,6 +87,7 @@ const SavingsPassbookScreen = () => {
         <View style={styles.separatorBar} />
         <FlatList
           style={styles.detailContentList}
+          ListFooterComponent={<View style={styles.footer} />}
           data={savingsPassbookList.items}
           renderItem={({item}) => (
             <View style={styles.detailContentContainer} key={item.savingsId}>
@@ -111,6 +111,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     backgroundColor: 'white',
+  },
+  footer: {
+    height: 300,
   },
   baseTextSize: {
     fontSize: 18,

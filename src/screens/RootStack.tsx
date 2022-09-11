@@ -22,19 +22,15 @@ import useAuthLoadEffect from '../hooks/useAuthLoadEffect';
 import {useRecoilValue, useRecoilState} from 'recoil';
 import {firstState} from '../atoms/first';
 import {useEffect} from 'react';
+import {isLoadingState} from '../atoms/isLoading';
 
 const Stack = createNativeStackNavigator();
 
 const RootStack = () => {
-  async function useFirstState() {
-    await useAuthLoadEffect();
-    setIsLoading(false);
-  }
-
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading] = useRecoilState(isLoadingState);
   const [firstScreenState, setFirstScreenState] = useRecoilState(firstState);
 
-  useFirstState();
+  useAuthLoadEffect();
 
   useEffect(() => {
     console.log(isLoading);
@@ -42,7 +38,7 @@ const RootStack = () => {
 
   console.log(firstScreenState.name);
   return (
-    isLoading === false && (
+    isLoading.state === false && (
       <Stack.Navigator initialRouteName={firstScreenState.name}>
         <Stack.Screen
           name="AboutFirst"

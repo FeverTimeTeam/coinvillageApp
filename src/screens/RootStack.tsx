@@ -19,14 +19,23 @@ import AboutFourthScreen from './about/AboutFourthScreen';
 import AboutFifthScreen from './about/AboutFifthScreen';
 import AboutLastScreen from './about/AboutLastScreen';
 import useAuthLoadEffect from '../hooks/useAuthLoadEffect';
-import {useRecoilValue, useRecoilState} from 'recoil';
+import {useRecoilState} from 'recoil';
 import {firstState} from '../atoms/first';
 import {useEffect} from 'react';
 import {isLoadingState} from '../atoms/isLoading';
+import StockPassbookDepositScreen from './passbook/StockPassbookDepositScreen';
+import StockDetailScreen from './passbook/StockDetailScreen';
+import StockTransactionScreen from './passbook/StockTransactionScreen';
+import {Button} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import MyInvestmentScreen from './investment/MyInvestmentScreen';
+import InvestmentBuyScreen from './investment/InvestmentBuyScreen';
+import InvestmentSellScreen from './investment/InvestmentSellScreen';
 
 const Stack = createNativeStackNavigator();
 
 const RootStack = () => {
+  const navigation = useNavigation();
   const [isLoading] = useRecoilState(isLoadingState);
   const [firstScreenState, setFirstScreenState] = useRecoilState(firstState);
 
@@ -121,7 +130,26 @@ const RootStack = () => {
           component={JobScreen}
           options={{title: '직업'}}
         />
-        <Stack.Screen name="Investment" component={InvestmentScreen} />
+        <Stack.Screen
+          name="Investment"
+          component={InvestmentScreen}
+          options={{title: '투자'}}
+        />
+        <Stack.Screen
+          name="InvestmentBuy"
+          component={InvestmentBuyScreen}
+          options={{title: '상세정보'}}
+        />
+        <Stack.Screen
+          name="MyInvestment"
+          component={MyInvestmentScreen}
+          options={{title: 'My 투자'}}
+        />
+        <Stack.Screen
+          name="InvestmentSell"
+          component={InvestmentSellScreen}
+          options={{title: '상세정보'}}
+        />
         <Stack.Screen
           name="Passbook"
           component={PassbookScreen}
@@ -151,6 +179,31 @@ const RootStack = () => {
           name="SavingsSetting"
           component={InstallmentSettingScreen}
           options={{title: '적금 통장'}}
+        />
+        <Stack.Screen
+          name="StockPassbookDeposit"
+          component={StockPassbookDepositScreen}
+          options={{title: '주식 통장'}}
+        />
+        <Stack.Screen
+          name="StockDetail"
+          component={StockDetailScreen}
+          options={{title: '상세 정보'}}
+        />
+        <Stack.Screen
+          name="StockTransaction"
+          component={StockTransactionScreen}
+          options={{
+            title: '거래 내역',
+            headerRight: () => (
+              <Button
+                onPress={() => {
+                  navigation.navigate('StockPassbook');
+                }}
+                title="적용"
+              />
+            ),
+          }}
         />
       </Stack.Navigator>
     )

@@ -5,10 +5,10 @@ import JobScreen from './JobScreen';
 import InvestmentScreen from './investment/InvestmentScreen';
 import PassbookScreen from './passbook/PassbookScreen';
 import BasePassbookScreen from './passbook/BasePassbookScreen';
-import InstallmentPassbookScreen from './passbook/InstallmentPassbookScreen';
+import InstallmentPassbookScreen from './passbook/SavingsPassbookScreen';
 import StockPassbookScreen from './passbook/StockPassbookScreen';
 import ConsumeScreen from './passbook/ConsumeScreen';
-import InstallmentSettingScreen from './passbook/InstallmentSettingScreen';
+import InstallmentSettingScreen from './passbook/SavingsSettingScreen';
 import LoginScreen from './LoginScreen';
 import LogoutScreen from './LogoutScreen';
 import SignUpScreen from './SignUpScreen';
@@ -133,7 +133,7 @@ const RootStack = () => {
           options={{title: '입출금 통장'}}
         />
         <Stack.Screen
-          name="InstallmentPassbook"
+          name="SavingsPassbook"
           component={InstallmentPassbookScreen}
           options={{title: '적금 통장'}}
         />
@@ -148,7 +148,7 @@ const RootStack = () => {
           options={{title: '입출금 통장'}}
         />
         <Stack.Screen
-          name="InstallmentSetting"
+          name="SavingsSetting"
           component={InstallmentSettingScreen}
           options={{title: '적금 통장'}}
         />

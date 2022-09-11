@@ -45,9 +45,6 @@ const BasePassbookScreen = () => {
   }, [basePassbookListState]);
 
   const [balance, setBalance] = useState<number>(0);
-  useEffect(() => {
-    let dd = new Date();
-  }, []);
 
   return (
     <View style={styles.block}>

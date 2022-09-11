@@ -15,25 +15,16 @@ import {useRecoilState} from 'recoil';
 import {authState} from '../atoms/auth';
 import {jobProfileState} from '../atoms/jobProfile';
 import {useEffect} from 'react';
+import jobStorage from '../storages/jobStorage';
+// import jobImage from '../constants/jobImage';
 
 const JobScreen = () => {
+  // console.log(jobImage.com);
+
   const [authUserState, setAuthUserState] = useRecoilState(authState);
-  const [profileState, setProfileState] = useRecoilState(jobProfileState);
+  const [profile, setProfile] = useRecoilState(jobProfileState);
 
-  type nation = {
-    name: string;
-    jobName: string;
-    jobDescription: string;
-    paycheck: number;
-  };
-  const [nationInfo, setNationInfo] = useState<nation>({
-    name: '유다연',
-    jobName: '개발자',
-    jobDescription: '돈 개 많 이 번 다 맨날 코딩하고~~!!~!~!',
-    paycheck: 13204000,
-  });
-
-  const [response, setResponse] = useState<any>(null);
+  const jobImage = 'coin';
 
   const onSelectImage = () => {
     launchImageLibrary(
@@ -47,10 +38,8 @@ const JobScreen = () => {
         if (res.didCancel) {
           return;
         }
-        setResponse(res);
-        setProfileState({uri: res?.assets[0]?.uri});
-
-        console.log(res?.assets[0].uri);
+        setProfile({uri: res?.assets[0]?.uri});
+        jobStorage.set(res?.assets[0].uri);
       },
     );
   };
@@ -67,16 +56,16 @@ const JobScreen = () => {
           <Image
             style={styles.circle}
             source={
-              response
-                ? {uri: profileState.uri}
+              profile.uri
+                ? {uri: profile.uri}
                 : require('../assets/images/profile.png')
             }
           />
           <Text style={[styles.text, styles.bold, styles.name]}>
-            {nationInfo.name}
+            {authUserState.user?.nickname}
           </Text>
           <Text style={[styles.text, styles.jobName]}>
-            {nationInfo.jobName}
+            {authUserState.user?.jobName}
           </Text>
           <TouchableOpacity
             style={styles.settingButtonWrapper}
@@ -87,20 +76,21 @@ const JobScreen = () => {
         <TouchableOpacity
           style={[styles.card, styles.cardBack]}
           onPress={() => this.card.flip()}>
-          <Image source={require('../assets/images/coin.png')} />
+          <Image source={require(`../assets/images/${jobImage}.png`)} />
           <View style={styles.jobDescriptionContainer}>
             <Text style={[styles.text, styles.bold, styles.bigText]}>
               하는 일
             </Text>
             <Text
               style={[styles.text, styles.smallText, styles.jobDescription]}>
-              {nationInfo.jobDescription}
+              {authUserState.user?.jobContent}
             </Text>
           </View>
           <View style={styles.paycheckContainer}>
             <Text style={[styles.text, styles.bold, styles.bigText]}>월급</Text>
             <Text style={[styles.text, styles.bigText]}>
-              <Text style={styles.bold}>{nationInfo.paycheck}</Text> 리브
+              <Text style={styles.bold}>{authUserState.user?.payCheck}</Text>{' '}
+              리브
             </Text>
           </View>
         </TouchableOpacity>

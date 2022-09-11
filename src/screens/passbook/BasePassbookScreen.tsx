@@ -17,6 +17,7 @@ import {useRecoilState} from 'recoil';
 
 const BasePassbookScreen = () => {
   const navigation = useNavigation();
+
   const [basePassbookListState, setBasePassbookListState] =
     useRecoilState(basePassbookState);
 
@@ -24,7 +25,6 @@ const BasePassbookScreen = () => {
     axiosInstance
       .get('/accounts')
       .then(response => {
-        // console.log(response.data);
         setBasePassbookListState({items: response.data});
       })
       .catch(e => {
@@ -67,6 +67,7 @@ const BasePassbookScreen = () => {
         <View style={styles.separatorBar} />
         <FlatList
           style={styles.detailContentList}
+          ListFooterComponent={<View style={styles.footer} />}
           data={basePassbookListState.items}
           renderItem={({item}) => (
             <View style={styles.detailContentContainer} key={item.accountId}>
@@ -98,6 +99,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     backgroundColor: 'white',
+  },
+  footer: {
+    height: 300,
   },
   balanceContainer: {
     display: 'flex',

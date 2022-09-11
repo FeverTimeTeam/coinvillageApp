@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     alignItems: 'center',
-    // backgroundColor: 'white',
+    backgroundColor: `${color.white}`,
   },
   passbookButton: {
     marginTop: 15,
@@ -107,6 +107,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     padding: 22,
+    ...Platform.select({
+      ios: {
+        shadowColor: `${color.black}`, //그림자색
+        shadowOpacity: 0.2, //그림자 투명도
+        shadowOffset: {width: 2, height: 3}, //그림자 위치
+        shadowRadius: 3,
+      },
+      android: {
+        //ANDROID
+        elevation: 3,
+      },
+    }),
   },
   country: {
     // color: `${color.kb}`,
@@ -129,6 +141,18 @@ const styles = StyleSheet.create({
     backgroundColor: color.light_gray3,
     justifyContent: 'center',
     borderRadius: 15,
+    ...Platform.select({
+      ios: {
+        shadowColor: `${color.black}`, //그림자색
+        shadowOpacity: 0.1, //그림자 투명도
+        shadowOffset: {width: 2, height: 3}, //그림자 위치
+        shadowRadius: 3,
+      },
+      android: {
+        //ANDROID
+        elevation: 3,
+      },
+    }),
   },
   informationText: {
     fontSize: 18,

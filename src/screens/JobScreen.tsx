@@ -44,6 +44,10 @@ const JobScreen = () => {
     );
   };
 
+  useEffect(() => {
+    console.log(profile.uri);
+  }, []);
+
   return (
     <View style={styles.block}>
       <CardFlip

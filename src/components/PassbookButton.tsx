@@ -6,6 +6,7 @@ type Props = {
   buttonText: string;
   textColor?: string;
   backgroundColor?: string;
+  borderColor?: string;
   onPress: () => void;
 };
 
@@ -14,11 +15,12 @@ const PassbookButton: React.FC<Props> = ({
   onPress,
   textColor = `${color.kb}`,
   backgroundColor = `${color.light_yellow}`,
+  borderColor = `${color.white}`,
 }) => {
   return (
     <Pressable
       style={({pressed}) => [
-        styles({textColor, backgroundColor}).button,
+        styles({textColor, backgroundColor, borderColor}).button,
         Platform.OS === 'ios' && pressed && {backgroundColor: color.light_gray},
       ]}
       android_ripple={{color: '#ededed'}}
@@ -30,7 +32,11 @@ const PassbookButton: React.FC<Props> = ({
   );
 };
 
-const styles = (value: {textColor: string; backgroundColor: string}) =>
+const styles = (value: {
+  textColor: string;
+  backgroundColor: string;
+  borderColor: string;
+}) =>
   StyleSheet.create({
     button: {
       width: '100%',
@@ -39,6 +45,8 @@ const styles = (value: {textColor: string; backgroundColor: string}) =>
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: value.backgroundColor,
+      borderWidth: 1,
+      borderColor: value.borderColor,
       borderRadius: 15,
     },
     buttonText: {

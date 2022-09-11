@@ -12,8 +12,13 @@ import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {useEffect} from 'react';
 import {axiosInstance} from '../../queries/index';
+import {useNavigation} from '@react-navigation/native';
+import useGetBasePassbookList from '../../api/getBasePassbookList';
+import {useRecoilState} from 'recoil';
+import {basePassbookState} from '../../atoms/basePassbook';
 
 const ConsumeScreen = () => {
+  const navigation = useNavigation();
   type item = {
     content: string;
     count: number;
@@ -28,6 +33,21 @@ const ConsumeScreen = () => {
   });
   const [balance, setBalance] = useState<number>(537);
   const {content, count, price, total} = item;
+
+  const [basePassbookListState, setBasePassbookListState] =
+    useRecoilState(basePassbookState);
+
+  const getBasePassbookList = () => {
+    axiosInstance
+      .get('/accounts')
+      .then(response => {
+        console.log(response.data);
+        setBasePassbookListState({items: response.data});
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
 
   return (
     <View style={styles.block}>
@@ -107,10 +127,6 @@ const ConsumeScreen = () => {
                   {text: 'OK', onPress: () => console.log('OK Pressed')},
                 ]);
               }
-              // setItem({
-              //   ...item,
-              //   total: count * price,
-              // });
             }}
           />
         </View>
@@ -122,8 +138,8 @@ const ConsumeScreen = () => {
         </Text>
         <PassbookButton
           buttonText="구매하기"
-          onPress={() => {
-            axiosInstance
+          onPress={async () => {
+            await axiosInstance
               .post('/accounts', {
                 content: content,
                 count: count,
@@ -135,6 +151,8 @@ const ConsumeScreen = () => {
               .catch(e => {
                 console.log(e);
               });
+            await getBasePassbookList();
+            navigation.pop();
           }}
         />
       </View>

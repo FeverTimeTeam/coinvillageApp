@@ -19,7 +19,8 @@ const Header = () => {
     <View style={styles.block}>
       <Image
         style={styles.covil}
-        source={require('../assets/images/header_image/header_image.png')}
+        source={require('../assets/images/logo.png')}
+        resizeMode="cover"
       />
       <View>
         {authUserState.user ? (
@@ -56,7 +57,10 @@ const styles = StyleSheet.create({
     paddingLeft: 19,
     paddingRight: 22,
   },
-  covil: {},
+  covil: {
+    width: 150,
+    height: 70,
+  },
   userContainer: {
     height: '100%',
     paddingBottom: 18,
@@ -67,11 +71,12 @@ const styles = StyleSheet.create({
   username: {
     color: `${color.warm_gray1}`,
     fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: 24,
   },
   nation: {
-    color: `${color.warm_gray1}`,
+    color: `${color.kb}`,
     fontSize: 18,
+    fontWeight: 'bold',
     textAlignVertical: 'bottom',
   },
   loginWrapper: {

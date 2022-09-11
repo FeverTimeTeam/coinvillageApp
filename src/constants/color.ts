@@ -22,7 +22,9 @@ const color = {
   apricot: '#FF8B49',
   light_apricot: '#FFE1D1',
   sky_blue: '#C3D4FF',
+  green: '#96C232',
   light_green: '#B5E34E',
+  light_green2: '#E5F4C3',
 };
 
 export default color;

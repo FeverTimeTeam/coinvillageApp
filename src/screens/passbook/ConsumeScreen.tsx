@@ -11,22 +11,23 @@ import {
 import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {useEffect} from 'react';
+import {axiosInstance} from '../../queries/index';
 
 const ConsumeScreen = () => {
   type item = {
-    name: string;
+    content: string;
+    count: number;
     price: number;
-    num: number;
-    totalPrice: number;
+    total: number;
   };
   const [item, setItem] = useState<item>({
-    name: '연필꽂이',
-    price: 20,
-    num: 2,
-    totalPrice: 40,
+    content: '',
+    count: 0,
+    price: 0,
+    total: 0,
   });
   const [balance, setBalance] = useState<number>(537);
-  const {name, price, num, totalPrice} = item;
+  const {content, count, price, total} = item;
 
   return (
     <View style={styles.block}>
@@ -41,11 +42,11 @@ const ConsumeScreen = () => {
         <Text style={styles.itemNameText}>품목</Text>
         <TextInput
           style={[styles.input, styles.itemNameInput]}
-          value={item.name}
+          value={item.content}
           onChange={e => {
             setItem({
               ...item,
-              name: e.nativeEvent.text,
+              content: e.nativeEvent.text,
             });
           }}
         />
@@ -61,7 +62,8 @@ const ConsumeScreen = () => {
               if (!isNaN(tmpPrice)) {
                 setItem({
                   ...item,
-                  price: parseInt(e.nativeEvent.text),
+                  price: tmpPrice,
+                  total: tmpPrice * count,
                 });
               } else if (e.nativeEvent.text === '') {
                 setItem({
@@ -88,18 +90,19 @@ const ConsumeScreen = () => {
           <Text style={styles.numText}>개수</Text>
           <TextInput
             style={[styles.input, styles.numInput]}
-            value={item.num.toString()}
+            value={item.count.toString()}
             onChange={e => {
-              const tmpNum = parseInt(e.nativeEvent.text);
-              if (!isNaN(tmpNum)) {
+              const tmpCount = parseInt(e.nativeEvent.text);
+              if (!isNaN(tmpCount)) {
                 setItem({
                   ...item,
-                  num: parseInt(e.nativeEvent.text),
+                  count: tmpCount,
+                  total: tmpCount * price,
                 });
               } else if (e.nativeEvent.text === '') {
                 setItem({
                   ...item,
-                  num: 0,
+                  count: 0,
                 });
               } else {
                 Alert.alert('Alert Title', 'My Alert Msg', [
@@ -111,6 +114,10 @@ const ConsumeScreen = () => {
                   {text: 'OK', onPress: () => console.log('OK Pressed')},
                 ]);
               }
+              // setItem({
+              //   ...item,
+              //   total: count * price,
+              // });
             }}
           />
         </View>
@@ -118,9 +125,25 @@ const ConsumeScreen = () => {
       <View style={styles.separatorBar} />
       <View style={styles.consumeButtonContainer}>
         <Text style={styles.totalPrice}>
-          총 <Text style={styles.bold}>{item?.totalPrice}</Text>미소 차감
+          총 <Text style={styles.bold}>{item?.total}</Text>미소 차감
         </Text>
-        <PassbookButton buttonText="구매하기" onPress={() => {}} />
+        <PassbookButton
+          buttonText="구매하기"
+          onPress={() => {
+            axiosInstance
+              .post('/accounts', {
+                content: content,
+                count: count,
+                total: count * price,
+              })
+              .then(response => {
+                console.log(response.data);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          }}
+        />
       </View>
     </View>
   );

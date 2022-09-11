@@ -10,58 +10,37 @@ import {
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import PassbookButton from '../../components/PassbookButton';
+import {axiosInstance} from '../../queries/index';
+import {useEffect} from 'react';
+import {useRecoilState} from 'recoil';
+import {
+  savingsPassbookListState,
+  SavingsPassbook,
+} from '../../atoms/savingsPassbook';
 
-const InstallmentPassbookScreen = () => {
+const SavingsPassbookScreen = () => {
   const navigation = useNavigation();
   const [totalMoney, setTotalMoney] = useState<number>(0);
-  const [basePassbookDetailList, setBasePassbookDetailList] = useState<
-    basePassbookDetail[]
-  >([
-    {
-      itemId: 0,
-      contentName: '1월 첫째주 적금',
-      money: 10,
-      moneyState: 'Deposit',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 1,
-      contentName: '1월 첫째주 적금',
-      money: 10,
-      moneyState: 'Deposit',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 2,
-      contentName: '1월 첫째주 적금',
-      money: 10,
-      moneyState: 'Deposit',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-    {
-      itemId: 3,
-      contentName: '1월 첫째주 적금',
-      money: 10,
-      moneyState: 'Deposit',
-      createdDate: {
-        year: new Date().getFullYear() + 1,
-        month: new Date().getMonth() + 1,
-        date: new Date().getDate(),
-      },
-    },
-  ]);
+  const [savingsPassbookList, setSavingsPassbookList] = useRecoilState(
+    savingsPassbookListState,
+  );
+  const getSavingsPassbookList = () => {
+    axiosInstance
+      .get('/savings')
+      .then(response => {
+        console.log('hi');
+        console.log(response.data);
+        setSavingsPassbookList({items: response.data});
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    getSavingsPassbookList();
+  }, []);
+
   const [term, setTerm] = useState<string>('매주 월요일');
   const [moneyUnit, setMoneyUnit] = useState<number>(0);
   return (
@@ -83,7 +62,7 @@ const InstallmentPassbookScreen = () => {
             <TouchableOpacity
               style={styles.settingButton}
               onPress={() => {
-                navigation.navigate('InstallmentSetting');
+                navigation.navigate('SavingsSetting');
               }}>
               <Image source={require('../../assets/images/setting.png')} />
             </TouchableOpacity>
@@ -94,30 +73,30 @@ const InstallmentPassbookScreen = () => {
             textColor={color.apricot}
             backgroundColor={color.light_apricot}
             buttonText="저축하기"
-            onPress={() => {}}
+            onPress={() => {
+              axiosInstance
+                .post('/savings', {})
+                .then(response => {
+                  console.log(response.data);
+                })
+                .catch(e => {
+                  console.log(e);
+                });
+            }}
           />
         </View>
         <View style={styles.separatorBar} />
         <FlatList
           style={styles.detailContentList}
-          data={basePassbookDetailList}
+          data={savingsPassbookList.items}
           renderItem={({item}) => (
-            <View style={styles.detailContentContainer} key={item.itemId}>
+            <View style={styles.detailContentContainer} key={item.savingsId}>
               <View style={styles.dateContainer}>
-                <Text style={styles.date}>{item.createdDate.month}월</Text>
-                <Text style={styles.date}>{item.createdDate.date}일</Text>
+                <Text style={styles.date}>{item.createdAt}</Text>
               </View>
               <View style={styles.contentContainer}>
-                <Text style={styles.contentName}>{item.contentName}</Text>
-                {item.moneyState === 'Withdrawal' ? (
-                  <Text style={[styles.money, styles.withdrawal]}>
-                    -{item.money}
-                  </Text>
-                ) : (
-                  <Text style={[styles.money, styles.deposit]}>
-                    +{item.money}
-                  </Text>
-                )}
+                <Text style={styles.contentName}>{item.content}</Text>
+                <Text style={[styles.money, styles.deposit]}>{item.total}</Text>
               </View>
             </View>
           )}
@@ -242,4 +221,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InstallmentPassbookScreen;
+export default SavingsPassbookScreen;

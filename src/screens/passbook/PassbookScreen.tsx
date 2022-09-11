@@ -55,7 +55,7 @@ const PassbookScreen = () => {
         ]}
         android_ripple={{color: '#ededed'}}
         onPress={() => {
-          navigation.push('InstallmentPassbook');
+          navigation.push('SavingsPassbook');
         }}>
         <ImageBackground
           style={styles.imageBackground}

@@ -3,10 +3,12 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
+import {axiosInstance} from '../../queries/index';
 
 const StockPassbookDepositScreen = () => {
   const navigation = useNavigation();
-  const [money, setMoney] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
+
   return (
     <View style={styles.block}>
       <View>
@@ -21,8 +23,17 @@ const StockPassbookDepositScreen = () => {
           <Text style={styles.textBig}>얼마를 입금하시겠습니까?</Text>
           <TextInput
             style={[styles.input, styles.textBig]}
-            value={money.toString()}
-            onChange={() => {}}
+            value={total.toString()}
+            onChange={e => {
+              const tmpTotal = parseInt(e.nativeEvent.text);
+              if (!isNaN(tmpTotal)) {
+                setTotal(tmpTotal);
+              } else if (e.nativeEvent.text === '') {
+                setTotal(0);
+              } else {
+                console.log('숫자만 입력');
+              }
+            }}
           />
         </View>
       </View>
@@ -36,6 +47,16 @@ const StockPassbookDepositScreen = () => {
             textColor={color.green}
             backgroundColor={color.light_green2}
             onPress={() => {
+              axiosInstance
+                .post('/accounts/stock', {
+                  total: total,
+                })
+                .then(response => {
+                  console.log(response.data);
+                })
+                .catch(e => {
+                  console.log(e);
+                });
               navigation.pop();
             }}
           />

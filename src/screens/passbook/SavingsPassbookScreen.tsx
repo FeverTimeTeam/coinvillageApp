@@ -28,8 +28,7 @@ const SavingsPassbookScreen = () => {
     axiosInstance
       .get('/savings')
       .then(response => {
-        console.log(response.data);
-        setSavingsPassbookList({items: response.data});
+        setSavingsPassbookList({items: response.data.reverse()});
       })
       .catch(e => {
         console.log(e);

@@ -42,7 +42,7 @@ const ConsumeScreen = () => {
       .get('/accounts')
       .then(response => {
         console.log(response.data);
-        setBasePassbookListState({items: response.data});
+        setBasePassbookListState({items: response.data.reverse()});
       })
       .catch(e => {
         console.log(e);

@@ -25,11 +25,10 @@ export default function useAuthLoadEffect() {
       axiosInstance.defaults.headers.Authorization = `Bearer ${auth.token}`;
       const profileUri = await jobStorage.get();
       setJobProfile({uri: profileUri});
-
       await setFirstScreenState({name: 'Home'});
       setIsLoading({state: false});
     };
 
     fn();
-  }, [setIsLoading, setFirstScreenState, setAuthUserState]);
+  }, [setIsLoading, setFirstScreenState, setAuthUserState, setJobProfile]);
 }

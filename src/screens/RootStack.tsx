@@ -31,6 +31,7 @@ import {useNavigation} from '@react-navigation/native';
 import MyInvestmentScreen from './investment/MyInvestmentScreen';
 import InvestmentBuyScreen from './investment/InvestmentBuyScreen';
 import InvestmentSellScreen from './investment/InvestmentSellScreen';
+import SignUpWebViewScreen from './SignUpWebViewScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -119,11 +120,18 @@ const RootStack = () => {
           }}
         />
         <Stack.Screen
-          name="SignUp"
-          component={SignUpScreen}
+          name="SignUpWebView"
+          component={SignUpWebViewScreen}
           // options={{
           //   headerShown: false,
           // }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{
+            headerShown: false,
+          }}
         />
         <Stack.Screen
           name="Job"

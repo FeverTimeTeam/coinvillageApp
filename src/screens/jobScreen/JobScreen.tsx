@@ -8,18 +8,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import color from '../constants/color';
+import color from '../../constants/color';
 import CardFlip from 'react-native-card-flip';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useRecoilState} from 'recoil';
-import {authState} from '../atoms/auth';
-import {jobProfileState} from '../atoms/jobProfile';
+import {authState} from '../../atoms/auth';
+import {jobProfileState} from '../../atoms/jobProfile';
 import {useEffect} from 'react';
-import jobStorage from '../storages/jobStorage';
-// import jobImage from '../constants/jobImage';
+import jobStorage from '../../storages/jobStorage';
+import {useNavigation} from '@react-navigation/native';
 
 const JobScreen = () => {
-  // console.log(jobImage.com);
+  const navigation = useNavigation();
 
   const [authUserState, setAuthUserState] = useRecoilState(authState);
   const [profile, setProfile] = useRecoilState(jobProfileState);
@@ -38,15 +38,17 @@ const JobScreen = () => {
         if (res.didCancel) {
           return;
         }
-        setProfile({uri: res?.assets[0]?.uri});
-        jobStorage.set(res?.assets[0].uri);
+        if (res.assets) {
+          setProfile({uri: res?.assets[0]?.uri});
+          jobStorage.set(res?.assets[0]?.uri);
+        }
       },
     );
   };
 
   useEffect(() => {
     console.log(profile.uri);
-  }, []);
+  }, [profile]);
 
   return (
     <View style={styles.block}>
@@ -57,30 +59,35 @@ const JobScreen = () => {
         <TouchableOpacity
           style={[styles.card, styles.cardFront]}
           onPress={() => this.card.flip()}>
-          <Image
-            style={styles.circle}
-            source={
-              profile.uri
-                ? {uri: profile.uri}
-                : require('../assets/images/profile.png')
-            }
-          />
+          {profile.uri ? (
+            <Image style={styles.circle} source={{uri: profile.uri}} />
+          ) : (
+            <Image
+              style={styles.circle}
+              source={require('../../assets/images/profile.png')}
+            />
+          )}
+
           <Text style={[styles.text, styles.bold, styles.name]}>
             {authUserState.user?.nickname}
           </Text>
           <Text style={[styles.text, styles.jobName]}>
             {authUserState.user?.jobName}
           </Text>
-          <TouchableOpacity
-            style={styles.settingButtonWrapper}
-            onPress={onSelectImage}>
-            <Image source={require('../assets/images/setting_white.png')} />
-          </TouchableOpacity>
+          <View style={styles.settingButtonWrapper}>
+            <TouchableOpacity onPress={onSelectImage}>
+              <Image
+                source={require('../../assets/images/setting_white.png')}
+              />
+            </TouchableOpacity>
+          </View>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.card, styles.cardBack]}
           onPress={() => this.card.flip()}>
-          <Image source={require(`../assets/images/${jobImage}.png`)} />
+          <Image
+            source={require('../../assets/images/job_icons/base_icon/base_icon.png')}
+          />
           <View style={styles.jobDescriptionContainer}>
             <Text style={[styles.text, styles.bold, styles.bigText]}>
               하는 일
@@ -96,6 +103,16 @@ const JobScreen = () => {
               <Text style={styles.bold}>{authUserState.user?.payCheck}</Text>{' '}
               리브
             </Text>
+          </View>
+          <View style={styles.settingButtonWrapper}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('SelectJobIcon');
+              }}>
+              <Image
+                source={require('../../assets/images/select_icon/select_icon.png')}
+              />
+            </TouchableOpacity>
           </View>
         </TouchableOpacity>
       </CardFlip>
@@ -143,9 +160,8 @@ const styles = StyleSheet.create({
   },
   cardBack: {
     backgroundColor: `${color.sky_blue}`,
-    paddingTop: 61,
+    paddingTop: 50,
     paddingBottom: 29,
-    paddingHorizontal: 39,
   },
   name: {
     fontSize: 35,
@@ -161,6 +177,7 @@ const styles = StyleSheet.create({
   },
   jobDescription: {
     marginTop: 16,
+    textAlign: 'center',
   },
   settingButtonWrapper: {
     width: '100%',
@@ -173,7 +190,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'space-between',
-    marginTop: 81,
+    marginTop: 60,
+    paddingHorizontal: 39,
+    marginBottom: 30,
   },
 });
 

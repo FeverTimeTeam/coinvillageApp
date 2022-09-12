@@ -8,6 +8,7 @@ export interface BasePassbook {
   count: number;
   total: string;
   state: 'DEPOSIT' | 'WITHDRAWL';
+  accountTotal: number;
 }
 
 interface BasePassbookState {

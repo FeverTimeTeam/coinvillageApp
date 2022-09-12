@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './HomeScreen';
-import JobScreen from './JobScreen';
+import JobScreen from './jobScreen/JobScreen';
 import InvestmentScreen from './investment/InvestmentScreen';
 import PassbookScreen from './passbook/PassbookScreen';
 import BasePassbookScreen from './passbook/BasePassbookScreen';
@@ -32,6 +32,7 @@ import MyInvestmentScreen from './investment/MyInvestmentScreen';
 import InvestmentBuyScreen from './investment/InvestmentBuyScreen';
 import InvestmentSellScreen from './investment/InvestmentSellScreen';
 import SignUpWebViewScreen from './SignUpWebViewScreen';
+import SelectJobIconScreen from './jobScreen/SelectJobIconScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -139,6 +140,11 @@ const RootStack = () => {
           options={{title: '직업'}}
         />
         <Stack.Screen
+          name="SelectJobIcon"
+          component={SelectJobIconScreen}
+          options={{title: ''}}
+        />
+        <Stack.Screen
           name="Investment"
           component={InvestmentScreen}
           options={{title: '투자'}}
@@ -186,7 +192,18 @@ const RootStack = () => {
         <Stack.Screen
           name="SavingsSetting"
           component={InstallmentSettingScreen}
-          options={{title: '적금 통장'}}
+          options={{
+            title: '적금 통장',
+            // headerRight: () => (
+            //   <Button
+            //     onPress={() => {
+            //       navigation.navigate('SavingsPassbook');
+            //       usePostSavingsSetting();
+            //     }}
+            //     title="적용"
+            //   />
+            // ),
+          }}
         />
         <Stack.Screen
           name="StockPassbookDeposit"

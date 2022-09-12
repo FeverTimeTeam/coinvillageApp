@@ -14,11 +14,13 @@ import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
+import {axiosInstance} from '../../queries';
+import {useRecoilState} from 'recoil';
+import {stockDetailState} from '../../atoms/stock';
 
 const InvestmentBuyScreen = ({route, navigation}) => {
   const {StatusBarManager} = NativeModules;
   const {stockId, content} = route.params;
-  const [price, setPrice] = useState(10);
   const [total, setTotal] = useState(0);
   const [count, setCount] = useState(0);
 
@@ -29,6 +31,25 @@ const InvestmentBuyScreen = ({route, navigation}) => {
         setStatusBarHeight(statusBarFrameData.height);
       });
     }
+  }, []);
+
+  const [stockDetail, setStockDetail] = useRecoilState(stockDetailState);
+
+  useEffect(() => {
+    const getStockDetail = () => {
+      axiosInstance
+        .get(`/stocks/${stockId}`)
+        .then(response => {
+          // setAllStockList({items: response.data.reverse()});
+          console.log(response.data);
+          setStockDetail({detail: response.data});
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+
+    getStockDetail();
   }, []);
 
   return (
@@ -46,7 +67,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
             styles.content,
             styles.marginHorizontal,
           ]}>
-          {content}
+          {stockDetail.detail?.content}
         </Text>
         <Text
           style={[
@@ -54,24 +75,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
             styles.fontColor,
             styles.marginHorizontal,
           ]}>
-          선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에
-          측정할 예정이며, 측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg
-          8.23 - 66kg 선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일
-          정오(낮 12시)에 측정할 예정이며, 측정할 때마다 정보를 수정할
-          예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는 오를까요,
-          내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며, 측정할 때마다
-          정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는
-          오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며,
-          측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg
-          선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에
-          측정할 예정이며, 측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg
-          8.23 - 66kg 선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일
-          정오(낮 12시)에 측정할 예정이며, 측정할 때마다 정보를 수정할
-          예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는 오를까요,
-          내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며, 측정할 때마다
-          정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는
-          오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며,
-          측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg
+          {stockDetail.detail?.description}
         </Text>
       </ScrollView>
       <View>
@@ -80,7 +84,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
             1주 당 금액
           </Text>
           <Text style={[styles.textSizeMid, styles.fontColor]}>
-            <Text style={styles.bold}>{price}</Text> 미소
+            <Text style={styles.bold}>{stockDetail.detail?.price}</Text> 미소
           </Text>
         </View>
         <View style={styles.buyFormWrapper}>
@@ -92,7 +96,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
                   const tmpCount = parseInt(e.nativeEvent.text);
                   if (!isNaN(tmpCount)) {
                     setCount(tmpCount);
-                    setTotal(tmpCount * price);
+                    setTotal(tmpCount * stockDetail.detail?.price);
                   } else if (e.nativeEvent.text === '') {
                     setCount(0);
                     setTotal(0);
@@ -106,7 +110,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
             <View>
               <Text
                 style={[styles.total, styles.fontColorRed, styles.textSizeBig]}>
-                총 <Text style={[styles.bold]}>{total} 미소</Text> 차감
+                총 <Text style={[styles.bold]}>{total} 리브</Text> 차감
               </Text>
             </View>
             <PassbookButton
@@ -115,13 +119,19 @@ const InvestmentBuyScreen = ({route, navigation}) => {
               backgroundColor={color.kb}
               onPress={() => {
                 Alert.alert(
-                  `${content}를 ${count}주 구매하시겠습니까?`,
+                  `${stockDetail.detail?.content}를 ${count}주 구매하시겠습니까?`,
                   `총 ${total} 미소 차감`,
                   [
                     {
                       text: '구매하기',
                       onPress: () => {
                         navigation.pop();
+                        Alert.alert('구매 완료!', `총 ${total} 미소 차감`, [
+                          {
+                            text: '확인',
+                            onPress: () => {},
+                          },
+                        ]);
                       },
                     },
                     {

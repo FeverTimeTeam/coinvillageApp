@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button,
   FlatList,
@@ -10,58 +10,29 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import color from '../../constants/color';
+import {axiosInstance} from '../../queries';
+import {useRecoilState} from 'recoil';
+import {allStockListState} from '../../atoms/stock';
 
 const InvestmentScreen = () => {
   const navigation = useNavigation();
-  const [stockPassbookList, setStockPassbookList] = useState([
-    {
-      stockId: 0,
-      content: '선생님 몸무게',
-      amount: 2,
-      state: 'DEPOSIT',
-    },
-    {
-      stockId: 1,
-      content: '학급 총 지각 횟수',
-      amount: 34,
-      state: 'DEPOSIT',
-    },
-    {
-      stockId: 2,
-      content: '선생님 손소독 횟수',
-      amount: 234,
-    },
-    {
-      stockId: 3,
-      content: '선생님 몸무게',
-      amount: 1,
-    },
-    {
-      stockId: 4,
-      content: '선생님 몸무게',
-      amount: 45,
-    },
-    {
-      stockId: 5,
-      content: '선생님 몸무게',
-      amount: 5,
-    },
-    {
-      stockId: 6,
-      content: '선생님 몸무게',
-      amount: 1,
-    },
-    {
-      stockId: 7,
-      content: '선생님 몸무게',
-      amount: 45,
-    },
-    {
-      stockId: 8,
-      content: '선생님 몸무게',
-      amount: 5,
-    },
-  ]);
+  const [allStockList, setAllStockList] = useRecoilState(allStockListState);
+  useEffect(() => {
+    const getAllStockList = () => {
+      axiosInstance
+        .get('/stocks')
+        .then(response => {
+          console.log(response.data);
+          setAllStockList({items: response.data.reverse()});
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+
+    getAllStockList();
+  }, [allStockList, setAllStockList]);
+
   return (
     <View style={styles.block}>
       <View style={styles.myInvestmentWrapper}>
@@ -80,26 +51,29 @@ const InvestmentScreen = () => {
         <FlatList
           style={[styles.detailContentList]}
           ListFooterComponent={<View style={styles.footer} />}
-          data={stockPassbookList}
+          data={allStockList.items}
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.contentContainer}
               key={item.stockId}
               onPress={() => {
-                navigation.navigate('InvestmentBuy', {
+                console.log(item.stockId);
+                navigation.push('InvestmentBuy', {
                   stockId: item.stockId,
                   content: item.content,
                 });
               }}>
               <Text style={[styles.textMid]}>{item.content}</Text>
-              {item.state === 'DEPOSIT' ? (
-                <Text style={[styles.bold, styles.textBig, styles.deposit]}>
-                  {item.amount}%
+              {item.gap > 0 ? (
+                <Text style={[styles.up, styles.bold, styles.textBig]}>
+                  +{item.percent.toFixed(2)}%
+                </Text>
+              ) : item.gap < 0 ? (
+                <Text style={[styles.down, styles.bold, styles.textBig]}>
+                  {item.percent.toFixed(2)}%
                 </Text>
               ) : (
-                <Text style={[styles.bold, styles.textBig, styles.withdrawal]}>
-                  {item.amount}%
-                </Text>
+                <Text style={[styles.bold, styles.textHuge]}>-</Text>
               )}
             </TouchableOpacity>
           )}
@@ -128,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   textHuge: {
-    fontSize: 20,
+    fontSize: 22,
   },
   bold: {
     fontWeight: 'bold',
@@ -152,10 +126,10 @@ const styles = StyleSheet.create({
     height: 7,
     backgroundColor: `${color.light_gray3}`,
   },
-  withdrawal: {
+  up: {
     color: `${color.system_warning}`,
   },
-  deposit: {
+  down: {
     color: `${color.blue}`,
   },
   myInvestmentWrapper: {

@@ -50,7 +50,7 @@ const BasePassbookScreen = () => {
           <Text style={styles.balanceText}>현재 잔액</Text>
           <Text style={styles.balanceMoneyText}>
             {basePassbookListState ? total : 0}
-            미소
+            리브
           </Text>
         </View>
         <View style={styles.consumeButtonWrapper}>

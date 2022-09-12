@@ -39,7 +39,15 @@ const LoginScreen = () => {
         authStorage.set(response.data);
         setAuthUserState({user: response.data.memberResponseDto});
         axiosInstance.defaults.headers.Authorization = `Bearer ${response.data.token}`;
-        navigation.pop();
+        Alert.alert('로그인 되었습니다!', '마을로 입장해주세요', [
+          {
+            text: '마을 입장하기',
+            onPress: () => {
+              navigation.pop();
+            },
+          },
+        ]);
+        // navigation.pop();
       })
       .catch(e => {
         console.log(e);

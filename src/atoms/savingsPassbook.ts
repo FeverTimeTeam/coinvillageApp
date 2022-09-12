@@ -9,12 +9,23 @@ export interface SavingsPassbook {
 }
 
 interface SavingsPassbookListState {
-  items: SavingsPassbook[] | null;
+  items: SavingsPassbook[] | [];
 }
 
 export const savingsPassbookListState = atom<SavingsPassbookListState>({
   key: 'savingsPassbookState',
   default: {
-    items: null,
+    items: [],
+  },
+});
+
+interface SavingsBillState {
+  bill: number;
+}
+
+export const savingsBillState = atom<SavingsBillState>({
+  key: 'savingsBillState',
+  default: {
+    bill: 0,
   },
 });

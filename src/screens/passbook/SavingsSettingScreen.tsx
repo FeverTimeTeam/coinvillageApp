@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
@@ -9,10 +10,16 @@ import {
 } from 'react-native';
 import color from '../../constants/color';
 import ModalSelector from 'react-native-modal-selector';
+import {axiosInstance} from '../../queries';
+import {useRecoilState} from 'recoil';
+import {savingsBillState} from '../../atoms/savingsPassbook';
+import PassbookButton from '../../components/PassbookButton';
+import {useNavigation} from '@react-navigation/native';
 
 const SavingsSettingScreen = () => {
+  const navigation = useNavigation();
   const [weekMoney, setWeekMoney] = useState<number>(0);
-  const [monthMoney, setMonthMoney] = useState<number>(0);
+  // const [monthMoney, setMonthMoney] = useState<number>(0);
   let index = 0;
   const data = [
     {key: index++, label: '월요일'},
@@ -23,18 +30,78 @@ const SavingsSettingScreen = () => {
   ];
 
   const [radioSelected, setRadioSelected] = useState<'week' | 'month'>('week');
+
+  const [billSetting, setBillSetting] = useRecoilState(savingsBillState);
+  const postSavingsSetting = () => {
+    axiosInstance
+      .put('/savings', {
+        bill: billSetting.bill,
+      })
+      .then(response => {
+        console.log(response.data);
+        Alert.alert(
+          '적용되었습니다!',
+          `매 달 ${billSetting.bill} 리브씩 저금됩니다.`,
+          [
+            {
+              text: '확인',
+              onPress: () => {
+                navigation.pop();
+              },
+            },
+          ],
+        );
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
   return (
     <View style={styles.block}>
       <View style={styles.termContainer}>
         <Text style={styles.currentText}>현재</Text>
-        <Text style={styles.termText}>매주 월요일, 5 미소씩</Text>
+        <Text style={styles.termText}>매 달 1일, {billSetting.bill} 리브</Text>
       </View>
       <View style={styles.infoWrapper}>
         <Text style={styles.infoText}>
-          * 변경 시 다음주 / 다음 달부터 적용됩니다.
+          * 설정 / 변경 시 다음 달부터 적용됩니다.
         </Text>
       </View>
-      <View style={styles.radioListContainer}>
+
+      <View style={styles.billContainer}>
+        <Text style={styles.selectText}>매달</Text>
+        <TextInput
+          style={[styles.input, styles.moneyInput]}
+          value={billSetting.bill.toString()}
+          onChange={e => {
+            const tmpMoney = parseInt(e.nativeEvent.text);
+            if (!isNaN(tmpMoney)) {
+              setBillSetting({bill: tmpMoney});
+            } else if (e.nativeEvent.text === '') {
+              setBillSetting({bill: 0});
+            } else {
+              console.log('숫자만 입력');
+            }
+          }}
+        />
+        <Text style={styles.selectText}>리브 넣기</Text>
+      </View>
+
+      <View style={styles.billContainer}>
+        <Text style={styles.selectText}>6개월 만기 시 10000 리브</Text>
+      </View>
+      <View style={styles.separatorBar} />
+      <View style={styles.buttonWrapper}>
+        <PassbookButton
+          textColor={color.apricot}
+          backgroundColor={color.light_apricot}
+          buttonText="적용하기"
+          onPress={() => {
+            postSavingsSetting();
+          }}
+        />
+      </View>
+      {/* <View style={styles.radioListContainer}>
         <View style={styles.radioContainer}>
           <View style={styles.radioButtonContainer}>
             <TouchableOpacity
@@ -133,7 +200,7 @@ const SavingsSettingScreen = () => {
             </View>
           )}
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -147,6 +214,11 @@ const styles = StyleSheet.create({
   termContainer: {
     marginTop: 15,
     marginHorizontal: 16,
+  },
+  separatorBar: {
+    height: 7,
+    backgroundColor: `${color.light_gray3}`,
+    marginVertical: 15,
   },
   currentText: {
     fontSize: 15,
@@ -202,7 +274,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    width: 70,
+    width: 180,
     borderWidth: 1,
     borderColor: `${color.apricot}`,
     borderRadius: 10,
@@ -211,6 +283,16 @@ const styles = StyleSheet.create({
   moneyInput: {
     fontSize: 18,
     textAlign: 'center',
+  },
+  buttonWrapper: {
+    // marginVertical: 15,
+  },
+  billContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 15,
   },
 });
 

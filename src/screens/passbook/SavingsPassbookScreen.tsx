@@ -16,6 +16,7 @@ import {useRecoilState} from 'recoil';
 import {
   savingsPassbookListState,
   SavingsPassbook,
+  savingsBillState,
 } from '../../atoms/savingsPassbook';
 
 const SavingsPassbookScreen = () => {
@@ -24,22 +25,24 @@ const SavingsPassbookScreen = () => {
   const [savingsPassbookList, setSavingsPassbookList] = useRecoilState(
     savingsPassbookListState,
   );
-  const getSavingsPassbookList = () => {
-    axiosInstance
-      .get('/savings')
-      .then(response => {
-        setSavingsPassbookList({items: response.data.reverse()});
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  const [billSetting, setBillSetting] = useRecoilState(savingsBillState);
 
   useEffect(() => {
-    getSavingsPassbookList();
-  }, []);
+    const getSavingsPassbookList = () => {
+      axiosInstance
+        .get('/savings')
+        .then(response => {
+          setSavingsPassbookList({items: response.data.reverse()});
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
 
-  const [term, setTerm] = useState<string>('매주 월요일');
+    getSavingsPassbookList();
+  }, [savingsPassbookList, setSavingsPassbookList]);
+
+  const [term, setTerm] = useState<string>('매월 1일');
   const [moneyUnit, setMoneyUnit] = useState<number>(0);
   return (
     <View style={styles.block}>
@@ -49,13 +52,17 @@ const SavingsPassbookScreen = () => {
             <Text style={[styles.bold, styles.baseTextSize]}>저축내역</Text>
             <View style={styles.totalMoneyView}>
               <Text style={styles.baseTextSize}>
-                총 <Text style={styles.bold}>{totalMoney}</Text> 미소
+                총{' '}
+                <Text style={styles.bold}>
+                  {savingsPassbookList?.items[0]?.savingsTotal}
+                </Text>{' '}
+                리브
               </Text>
             </View>
           </View>
           <View style={styles.moneyUnitSettingContainer}>
             <Text style={[styles.baseTextSize, styles.termText]}>
-              {term}, {moneyUnit} 미소
+              매 달 {billSetting.bill} 리브씩
             </Text>
             <TouchableOpacity
               style={styles.settingButton}
@@ -65,8 +72,11 @@ const SavingsPassbookScreen = () => {
               <Image source={require('../../assets/images/setting.png')} />
             </TouchableOpacity>
           </View>
+          <View style={styles.billContainer}>
+            <Text style={styles.baseTextSize}>6개월 만기 시 10000 리브</Text>
+          </View>
         </View>
-        <View style={styles.consumeButtonWrapper}>
+        {/* <View style={styles.consumeButtonWrapper}>
           <PassbookButton
             textColor={color.apricot}
             backgroundColor={color.light_apricot}
@@ -82,7 +92,7 @@ const SavingsPassbookScreen = () => {
                 });
             }}
           />
-        </View>
+        </View> */}
         <View style={styles.separatorBar} />
         <FlatList
           style={styles.detailContentList}
@@ -115,7 +125,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   baseTextSize: {
-    fontSize: 18,
+    fontSize: 20,
     color: `${color.deep}`,
   },
   bold: {
@@ -125,7 +135,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-evenly',
     flexDirection: 'column',
-    height: 82,
+    height: 150,
     paddingLeft: 35,
     paddingHorizontal: 13,
   },
@@ -139,8 +149,8 @@ const styles = StyleSheet.create({
   },
   totalMoneyView: {
     backgroundColor: `${color.light_apricot}`,
-    width: 117,
-    height: 35,
+    width: 130,
+    height: 40,
     borderRadius: 17.5,
     display: 'flex',
     justifyContent: 'center',
@@ -158,6 +168,7 @@ const styles = StyleSheet.create({
   separatorBar: {
     height: 7,
     backgroundColor: `${color.light_gray3}`,
+    marginVertical: 15,
   },
   detailContentList: {},
   detailContentContainer: {
@@ -220,6 +231,13 @@ const styles = StyleSheet.create({
   consumeButtonText: {
     color: `${color.kb}`,
     fontSize: 24,
+  },
+  billContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginTop: 15,
   },
 });
 

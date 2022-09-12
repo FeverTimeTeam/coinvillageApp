@@ -21,11 +21,16 @@ const BasePassbookScreen = () => {
   const [basePassbookListState, setBasePassbookListState] =
     useRecoilState(basePassbookState);
 
+  const [total, setTotal] = useState<number>(0);
+
   const getBasePassbookList = () => {
     axiosInstance
       .get('/accounts')
       .then(response => {
         setBasePassbookListState({items: response.data.reverse()});
+        if (basePassbookListState) {
+          setTotal(basePassbookListState.items[0].accountTotal);
+        }
       })
       .catch(e => {
         console.log(e);
@@ -44,9 +49,7 @@ const BasePassbookScreen = () => {
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceText}>현재 잔액</Text>
           <Text style={styles.balanceMoneyText}>
-            {basePassbookListState !== null
-              ? basePassbookListState.items[0].accountTotal
-              : 0}
+            {basePassbookListState ? total : 0}
             미소
           </Text>
         </View>

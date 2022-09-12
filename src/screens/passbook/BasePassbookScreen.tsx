@@ -25,7 +25,7 @@ const BasePassbookScreen = () => {
     axiosInstance
       .get('/accounts')
       .then(response => {
-        setBasePassbookListState({items: response.data});
+        setBasePassbookListState({items: response.data.reverse()});
       })
       .catch(e => {
         console.log(e);
@@ -36,14 +36,6 @@ const BasePassbookScreen = () => {
     getBasePassbookList();
   }, []);
 
-  useEffect(() => {
-    basePassbookListState.items &&
-      basePassbookListState.items.map(item => {
-        console.log(item.content);
-        console.log(item.total);
-      });
-  }, [basePassbookListState]);
-
   const [balance, setBalance] = useState<number>(0);
 
   return (
@@ -51,7 +43,12 @@ const BasePassbookScreen = () => {
       <View>
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceText}>현재 잔액</Text>
-          <Text style={styles.balanceMoneyText}>{balance}미소</Text>
+          <Text style={styles.balanceMoneyText}>
+            {basePassbookListState !== null
+              ? basePassbookListState.items[0].accountTotal
+              : 0}
+            미소
+          </Text>
         </View>
         <View style={styles.consumeButtonWrapper}>
           <PassbookButton

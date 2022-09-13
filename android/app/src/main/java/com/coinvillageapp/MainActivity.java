@@ -10,7 +10,7 @@ import org.devio.rn.splashscreen.SplashScreen;
 public class MainActivity extends ReactActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this, R.style.SplashScreenTheme);
+        SplashScreen.show(this);
         super.onCreate(savedInstanceState);
     }
   /**
@@ -29,25 +29,26 @@ public class MainActivity extends ReactActivity {
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
     return new MainActivityDelegate(this, getMainComponentName());
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this, R.style.SplashScreenTheme);
-        super.onCreate(savedInstanceState);
-    }  }
+  }
+    // @Override
+    // protected void onCreate(Bundle savedInstanceState) {
+    //     SplashScreen.show(this, R.style.SplashScreenTheme);
+    //     super.onCreate(savedInstanceState);
+    //   }
+    // }
 
   public static class MainActivityDelegate extends ReactActivityDelegate {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this, R.style.SplashScreenTheme);
-        super.onCreate(savedInstanceState);
-    }    public MainActivityDelegate(ReactActivity activity, String mainComponentName) {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        SplashScreen.show(this, R.style.SplashScreenTheme);
-        super.onCreate(savedInstanceState);
-    }      super(activity, mainComponentName);
-    }
+    // @Override
+    // protected void onCreate(Bundle savedInstanceState) {
+    //     SplashScreen.show(this, R.style.SplashScreenTheme);
+    //     super.onCreate(savedInstanceState);
+    // }    
+    public MainActivityDelegate(ReactActivity activity, String mainComponentName) {
 
+          super(activity, mainComponentName);
+    }
+    
+  
     @Override
     protected ReactRootView createRootView() {
       ReactRootView reactRootView = new ReactRootView(getContext());
@@ -56,4 +57,5 @@ public class MainActivity extends ReactActivity {
       return reactRootView;
     }
   }
+
 }

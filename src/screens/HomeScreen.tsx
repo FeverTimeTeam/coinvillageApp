@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
     top: 300,
     zIndex: 3,
     marginHorizontal: 15,
-    backgroundColor: 'rgba(200,200,200,0.5)',
+    backgroundColor: 'rgba(50,50,50,0.4)',
     height: 81,
     borderRadius: 17,
     display: 'flex',
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: `${color.warm_gray_deep}`, //그림자색
+        shadowColor: `${color.white}`, //그림자색
         shadowOpacity: 0.8, //그림자 투명도
         shadowOffset: {width: 5, height: 5}, //그림자 위치
         shadowRadius: 3,

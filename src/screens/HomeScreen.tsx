@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,6 +9,7 @@ import {
   Pressable,
   Text,
   useWindowDimensions,
+  Animated,
 } from 'react-native';
 import PassbookButton from '~/components/PassbookButton';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,6 +19,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import {useEffect} from 'react';
 import LoadingScreen from '../components/LoadingScreen';
 import {useNavigation} from '@react-navigation/native';
+import Slide from '~/components/Slide';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -33,6 +35,18 @@ const HomeScreen = () => {
         locations={[0, 0.5]}
         style={styles.inner}>
         <Header />
+
+        <TouchableOpacity
+          style={styles.heartWrapper}
+          onPress={() => {
+            setIsHeartClicked(prev => !prev);
+          }}>
+          <Image
+            source={require('~/assets/images/speech_bubble/speech_bubble.png')}
+            style={styles.heart}
+          />
+        </TouchableOpacity>
+
         <Image
           source={require('~/assets/images/world.png')}
           style={styles.world}
@@ -42,16 +56,6 @@ const HomeScreen = () => {
           source={require('~/assets/images/world_shadow.png')}
           style={styles.shadow}
         />
-        <TouchableOpacity
-          style={styles.heartWrapper}
-          onPress={() => {
-            setIsHeartClicked(prev => !prev);
-          }}>
-          <Image
-            source={require('~/assets/images/heart/heart.png')}
-            style={styles.heart}
-          />
-        </TouchableOpacity>
         {isHeartClicked && (
           <View style={styles.today}>
             <Text style={styles.todayTitle}>오늘의 Talk</Text>
@@ -107,6 +111,12 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
   },
+  // rectangle: {
+  //   backgroundColor: 'white',
+  //   zIndex: 3,
+  //   width: 100,
+  //   height: 100,
+  // },
   inner: {
     flex: 1,
     paddingTop: 50,
@@ -114,7 +124,7 @@ const styles = StyleSheet.create({
   world: {
     width: '100%',
     height: 390,
-    zIndex: 3,
+    zIndex: 2,
   },
   shadow: {
     position: 'absolute',
@@ -159,9 +169,9 @@ const styles = StyleSheet.create({
   },
   heartWrapper: {
     position: 'absolute',
-    left: 225,
-    top: 250,
-    zIndex: 3,
+    left: 200,
+    top: 190,
+    zIndex: 8,
   },
   heart: {},
   buttonContainer: {

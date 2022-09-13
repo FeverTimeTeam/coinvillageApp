@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     paddingHorizontal: 16,
+    paddingTop: 50,
   },
   logoutButton: {
     display: 'flex',

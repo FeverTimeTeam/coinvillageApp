@@ -15,43 +15,26 @@ import {axiosInstance} from '../../queries/index';
 import {useEffect} from 'react';
 import {useRecoilState} from 'recoil';
 import {savingsPassbookListState} from '../../atoms/savingsPassbook';
+import {myStockListState} from '../../atoms/stock';
 
 const StockPassbookScreen = () => {
   const navigation = useNavigation();
-  const [totalMoney, setTotalMoney] = useState<number>(0);
+  const [myStockList, setMyStockList] = useRecoilState(myStockListState);
 
-  const [stockPassbookList, setStockPassbookList] = useState([
-    {
-      stockId: 0,
-      content: '선생님 몸무게',
-      amount: 2,
-    },
-    {
-      stockId: 1,
-      content: '학급 총 지각 횟수',
-      amount: 34,
-    },
-    {
-      stockId: 2,
-      content: '선생님 손소독 횟수',
-      amount: 234,
-    },
-    {
-      stockId: 3,
-      content: '선생님 몸무게',
-      amount: 1,
-    },
-    {
-      stockId: 4,
-      content: '선생님 몸무게',
-      amount: 45,
-    },
-    {
-      stockId: 5,
-      content: '선생님 몸무게',
-      amount: 5,
-    },
-  ]);
+  useEffect(() => {
+    const getMyStockList = () => {
+      axiosInstance
+        .get('/stocks/mypage')
+        .then(response => {
+          console.log(response.data);
+          setMyStockList({items: response.data});
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getMyStockList();
+  }, [setMyStockList]);
 
   return (
     <View style={styles.block}>
@@ -59,7 +42,11 @@ const StockPassbookScreen = () => {
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>
             <Text style={[styles.textBig]}>
-              총 <Text style={styles.bold}>537 </Text>미소
+              총{' '}
+              <Text style={styles.bold}>
+                {myStockList.items[0]?.stockTotal}{' '}
+              </Text>
+              리브
             </Text>
           </View>
         </View>
@@ -75,7 +62,9 @@ const StockPassbookScreen = () => {
             backgroundColor={color.light_green2}
             borderColor={color.light_green2}
             onPress={() => {
-              navigation.navigate('StockPassbookDeposit');
+              navigation.navigate('StockPassbookDeposit', {
+                stockTotal: myStockList.items[0]?.stockTotal,
+              });
             }}
           />
         </View>
@@ -99,7 +88,7 @@ const StockPassbookScreen = () => {
         <FlatList
           style={[styles.detailContentList]}
           ListFooterComponent={<View style={styles.footer} />}
-          data={stockPassbookList}
+          data={myStockList.items}
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.contentContainer}
@@ -108,11 +97,14 @@ const StockPassbookScreen = () => {
                 navigation.navigate('StockDetail', {
                   stockId: item.stockId,
                   content: item.content,
-                  amount: item.amount,
+                  price: item.price,
+                  buyCount: item.buyCount,
                 });
               }}>
               <Text style={[styles.textMid]}>{item.content}</Text>
-              <Text style={[styles.bold, styles.textBig]}>{item.amount}주</Text>
+              <Text style={[styles.bold, styles.textBig]}>
+                {item.buyCount}주
+              </Text>
             </TouchableOpacity>
           )}
         />

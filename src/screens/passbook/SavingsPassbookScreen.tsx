@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
-import PassbookButton from '../../components/PassbookButton';
+import PassbookButton from '~/components/PassbookButton';
 import {axiosInstance} from '../../queries/index';
 import {useEffect} from 'react';
 import {useRecoilState} from 'recoil';
@@ -18,7 +18,7 @@ import {
   SavingsPassbook,
   savingsBillState,
 } from '../../atoms/savingsPassbook';
-import LoadingScreen from '../../components/LoadingScreen';
+import LoadingScreen from '~/components/LoadingScreen';
 
 const SavingsPassbookScreen = () => {
   const navigation = useNavigation();

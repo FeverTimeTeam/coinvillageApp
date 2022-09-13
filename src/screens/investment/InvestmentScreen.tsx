@@ -22,7 +22,6 @@ const InvestmentScreen = () => {
       axiosInstance
         .get('/stocks')
         .then(response => {
-          console.log(response.data);
           setAllStockList({items: response.data.reverse()});
         })
         .catch(e => {
@@ -57,7 +56,6 @@ const InvestmentScreen = () => {
               style={styles.contentContainer}
               key={item.stockId}
               onPress={() => {
-                console.log(item.stockId);
                 navigation.push('InvestmentBuy', {
                   stockId: item.stockId,
                   content: item.content,

@@ -13,6 +13,7 @@ import color from '../../constants/color';
 import {axiosInstance} from '../../queries';
 import {useRecoilState} from 'recoil';
 import {allStockListState} from '../../atoms/stock';
+import LoadingScreen from '../../components/LoadingScreen';
 
 const InvestmentScreen = () => {
   const navigation = useNavigation();
@@ -22,7 +23,7 @@ const InvestmentScreen = () => {
       axiosInstance
         .get('/stocks')
         .then(response => {
-          setAllStockList({items: response.data.reverse()});
+          setAllStockList({items: response.data});
         })
         .catch(e => {
           console.log(e);
@@ -34,6 +35,7 @@ const InvestmentScreen = () => {
 
   return (
     <View style={styles.block}>
+      <LoadingScreen />
       <View style={styles.myInvestmentWrapper}>
         <TouchableOpacity
           style={styles.myInvestment}

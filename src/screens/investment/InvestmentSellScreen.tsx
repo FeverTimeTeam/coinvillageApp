@@ -14,13 +14,17 @@ import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useNavigation} from '@react-navigation/native';
+import {myStockDetailState, myStockListState} from '../../atoms/stock';
+import {useRecoilState} from 'recoil';
+import {axiosInstance} from '../../queries/index';
 
 const InvestmentSellScreen = ({route, navigation}) => {
   const {StatusBarManager} = NativeModules;
-  const {stockId, content} = route.params;
-  const [price, setPrice] = useState(10);
+  const {stockId} = route.params;
   const [total, setTotal] = useState(0);
   const [count, setCount] = useState(0);
+
+  const [myStockDetail, setMyStockDetail] = useRecoilState(myStockDetailState);
 
   const [statusBarHeight, setStatusBarHeight] = useState(0);
   useEffect(() => {
@@ -29,7 +33,47 @@ const InvestmentSellScreen = ({route, navigation}) => {
         setStatusBarHeight(statusBarFrameData.height);
       });
     }
-  }, []);
+  }, [StatusBarManager]);
+
+  const [myStockList, setMyStockList] = useRecoilState(myStockListState);
+
+  const getMyStockList = () => {
+    axiosInstance
+      .get('/stocks/mypage')
+      .then(response => {
+        console.log(response.data);
+        setMyStockList({items: response.data});
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  useEffect(() => {
+    const getMyStockDetail = () => {
+      axiosInstance
+        .get(`/stocks/mypage/${stockId}`)
+        .then(response => {
+          console.log(response.data);
+          setMyStockDetail({detail: response.data});
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getMyStockDetail();
+  }, [setMyStockDetail, stockId]);
+
+  const sellStock = () => {
+    axiosInstance
+      .post(`/stocks/mypage/${stockId}`, {})
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -46,7 +90,7 @@ const InvestmentSellScreen = ({route, navigation}) => {
             styles.content,
             styles.marginHorizontal,
           ]}>
-          {content}
+          {myStockDetail.detail?.content}
         </Text>
         <Text
           style={[
@@ -54,24 +98,7 @@ const InvestmentSellScreen = ({route, navigation}) => {
             styles.fontColor,
             styles.marginHorizontal,
           ]}>
-          선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에
-          측정할 예정이며, 측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg
-          8.23 - 66kg 선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일
-          정오(낮 12시)에 측정할 예정이며, 측정할 때마다 정보를 수정할
-          예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는 오를까요,
-          내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며, 측정할 때마다
-          정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는
-          오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며,
-          측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg
-          선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에
-          측정할 예정이며, 측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg
-          8.23 - 66kg 선생님의 몸무게는 오를까요, 내릴까요? 몸무게는 매일
-          정오(낮 12시)에 측정할 예정이며, 측정할 때마다 정보를 수정할
-          예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는 오를까요,
-          내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며, 측정할 때마다
-          정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg 선생님의 몸무게는
-          오를까요, 내릴까요? 몸무게는 매일 정오(낮 12시)에 측정할 예정이며,
-          측정할 때마다 정보를 수정할 예정입니다. 8.22 - 65.3kg 8.23 - 66kg
+          {myStockDetail.detail?.description}
         </Text>
       </ScrollView>
       <View>
@@ -80,7 +107,8 @@ const InvestmentSellScreen = ({route, navigation}) => {
             <View style={[styles.itemContainer]}>
               <Text style={[styles.textSizeMid, styles.fontColor]}>1주 당</Text>
               <Text style={[styles.textSizeMid, styles.fontColor]}>
-                <Text style={styles.bold}>{price}</Text> 미소
+                <Text style={styles.bold}>{myStockDetail.detail?.price}</Text>{' '}
+                리브
               </Text>
             </View>
             <View style={[styles.itemContainer]}>
@@ -88,7 +116,10 @@ const InvestmentSellScreen = ({route, navigation}) => {
                 보유 주
               </Text>
               <Text style={[styles.textSizeMid, styles.fontColor]}>
-                <Text style={styles.bold}>{count}</Text> 주
+                <Text style={styles.bold}>
+                  {myStockDetail.detail?.buyCount}
+                </Text>{' '}
+                주
               </Text>
             </View>
             <View style={styles.amount}>
@@ -96,9 +127,9 @@ const InvestmentSellScreen = ({route, navigation}) => {
                 style={styles.input}
                 onChange={e => {
                   const tmpCount = parseInt(e.nativeEvent.text);
-                  if (!isNaN(tmpCount)) {
+                  if (!isNaN(tmpCount) && myStockDetail.detail?.price) {
                     setCount(tmpCount);
-                    setTotal(tmpCount * price);
+                    setTotal(tmpCount * myStockDetail.detail?.price);
                   } else if (e.nativeEvent.text === '') {
                     setCount(0);
                     setTotal(0);
@@ -121,18 +152,20 @@ const InvestmentSellScreen = ({route, navigation}) => {
               backgroundColor={color.kb}
               onPress={() => {
                 Alert.alert(
-                  `${content}를 ${count}주 팔겠습니까?`,
+                  `${myStockDetail.detail?.content}를 ${count}주 팔겠습니까?`,
                   `총 ${total} 미소 차감`,
                   [
                     {
-                      text: '구매하기',
-                      onPress: () => {
+                      text: '팔기',
+                      onPress: async () => {
+                        sellStock();
+                        await getMyStockList();
                         navigation.pop();
                       },
                     },
                     {
                       text: '취소하기',
-                      onPress: () => console.log('Cancel Pressed'),
+                      onPress: () => {},
                       style: 'cancel',
                     },
                   ],

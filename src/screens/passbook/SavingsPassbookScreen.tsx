@@ -19,6 +19,7 @@ import {
   savingsBillState,
 } from '../../atoms/savingsPassbook';
 import LoadingScreen from '~/components/LoadingScreen';
+import TotalMoneyView from '~/components/TotalMoneyView';
 
 const SavingsPassbookScreen = () => {
   const navigation = useNavigation();
@@ -52,15 +53,9 @@ const SavingsPassbookScreen = () => {
         <View style={styles.installmentContainer}>
           <View style={styles.totalMoneyContainer}>
             <Text style={[styles.bold, styles.baseTextSize]}>저축내역</Text>
-            <View style={styles.totalMoneyView}>
-              <Text style={styles.baseTextSize}>
-                총{' '}
-                <Text style={styles.bold}>
-                  {savingsPassbookList?.items[0]?.savingsTotal}
-                </Text>{' '}
-                리브
-              </Text>
-            </View>
+            <TotalMoneyView
+              total={savingsPassbookList?.items[0]?.savingsTotal}
+            />
           </View>
           <View style={styles.moneyUnitSettingContainer}>
             <Text style={[styles.baseTextSize, styles.termText]}>
@@ -147,15 +142,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  totalMoneyView: {
-    backgroundColor: `${color.light_apricot}`,
-    width: 130,
-    height: 40,
-    borderRadius: 17.5,
-    display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
   },
   moneyUnitSettingContainer: {

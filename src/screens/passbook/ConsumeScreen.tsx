@@ -16,6 +16,7 @@ import {axiosInstance} from '../../queries/index';
 import {useNavigation} from '@react-navigation/native';
 import {useRecoilState} from 'recoil';
 import {basePassbookListState} from '../../atoms/basePassbook';
+import TotalMoneyView from '~/components/TotalMoneyView';
 
 const ConsumeScreen = () => {
   const navigation = useNavigation();
@@ -68,15 +69,10 @@ const ConsumeScreen = () => {
       keyboardVerticalOffset={statusBarHeight + 44}>
       <View>
         <View style={styles.balanceContainer}>
-          <View style={styles.balanceView}>
-            <Text style={styles.balanceText}>
-              잔액{' '}
-              <Text style={styles.bold}>
-                {basePassbookList.items[0].accountTotal}
-              </Text>{' '}
-              리브
-            </Text>
-          </View>
+          <TotalMoneyView
+            total={basePassbookList.items[0].accountTotal}
+            backgroundColor={color.light_yellow}
+          />
         </View>
         <View style={styles.itemNameContainer}>
           <Text style={styles.itemNameText}>품목</Text>

@@ -21,6 +21,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import {useNavigation} from '@react-navigation/native';
 import Slide from '~/components/Slide';
 import ShadowEffect from '~/components/ShadowEffect';
+import {axiosInstance} from '../queries/index';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -28,6 +29,30 @@ const HomeScreen = () => {
   const boxSize = dimensions.width - 20;
 
   const [isHeartClicked, setIsHeartClicked] = useState<boolean>(false);
+
+  type TodayMessage = {
+    todayMessageId: number;
+    message: string;
+    updatedAt: Date;
+  };
+  const [todayMessage, setTodayMessage] = useState<TodayMessage>({
+    todayMessageId: 0,
+    message: '',
+    updatedAt: new Date(),
+  });
+
+  const getTodayMessage = () => {
+    axiosInstance
+      .get('/infos')
+      .then(response => {
+        setTodayMessage(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
+  getTodayMessage();
 
   return (
     <View style={styles.block}>
@@ -58,9 +83,7 @@ const HomeScreen = () => {
         {isHeartClicked && (
           <View style={styles.today}>
             <Text style={styles.todayTitle}>오늘의 Talk</Text>
-            <Text style={styles.todayContent}>
-              선생님은 내일 본가 갈 예정 ㅎㅎ
-            </Text>
+            <Text style={styles.todayContent}>{todayMessage.message}</Text>
           </View>
         )}
         <View style={styles.buttonContainer}>
@@ -98,20 +121,6 @@ const HomeScreen = () => {
     </View>
   );
 };
-
-// const dynamicStyles = (value: {boxSize: any}) =>
-//   StyleSheet.create({
-//     todayBox: {
-//       position: 'absolute',
-//       top: 300,
-//       left: 10,
-//       width: `${value.boxSize}`,
-//       // width: '100%',
-//       height: 200,
-//       backgroundColor: `${color.black}`,
-//       zIndex: 3,
-//     },
-//   });
 
 const styles = StyleSheet.create({
   block: {

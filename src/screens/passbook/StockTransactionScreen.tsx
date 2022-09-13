@@ -1,49 +1,50 @@
 import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {useRecoilState} from 'recoil';
-import {basePassbookState} from '../../atoms/basePassbook';
 import color from '../../constants/color';
 import {axiosInstance} from '../../queries';
+import {stockHistoryListState} from '../../atoms/stock';
 
 const StockTransactionScreen = () => {
-  const [basePassbookListState, setBasePassbookListState] =
-    useRecoilState(basePassbookState);
-
-  const getBasePassbookList = () => {
-    axiosInstance
-      .get('/accounts')
-      .then(response => {
-        setBasePassbookListState({items: response.data});
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
+  const [stockHistoryList, setStockHistoryList] = useRecoilState(
+    stockHistoryListState,
+  );
 
   useEffect(() => {
-    getBasePassbookList();
-  }, []);
+    const getStockHistoryList = () => {
+      axiosInstance
+        .get('/stocks/history')
+        .then(response => {
+          // console.log(response.data.reverse());
+          setStockHistoryList({items: response.data.reverse()});
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getStockHistoryList();
+  }, [setStockHistoryList]);
 
   return (
     <View style={styles.block}>
       <FlatList
         style={styles.detailContentList}
         ListFooterComponent={<View style={styles.footer} />}
-        data={basePassbookListState.items}
+        data={stockHistoryList.items}
         renderItem={({item}) => (
-          <View style={styles.detailContentContainer} key={item.accountId}>
+          <View style={styles.detailContentContainer} key={item.stockId}>
             <View style={styles.dateContainer}>
               <Text style={styles.date}>{item.createdAt}</Text>
               <Text style={styles.contentName}>{item.content}</Text>
             </View>
             <View style={styles.contentContainer}>
-              {item.state === 'DEPOSIT' ? (
+              {item.stateName === 'DEPOSIT' ? (
                 <Text style={[styles.money, styles.deposit]}>
-                  {item.total}주
+                  +{item.countCount}주
                 </Text>
               ) : (
                 <Text style={[styles.money, styles.withdrawal]}>
-                  {item.total}주
+                  -{item.countCount}주
                 </Text>
               )}
             </View>
@@ -64,13 +65,14 @@ const styles = StyleSheet.create({
   },
   detailContentList: {},
   detailContentContainer: {
-    marginHorizontal: 16,
+    marginHorizontal: 20,
+    marginVertical: 5,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 50,
-    paddingTop: 10,
+    paddingTop: 20,
   },
   dateContainer: {
     display: 'flex',
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
   },
   date: {
     color: `${color.system_information}`,
-    fontSize: 12,
+    fontSize: 15,
   },
   contentContainer: {
     width: 120,

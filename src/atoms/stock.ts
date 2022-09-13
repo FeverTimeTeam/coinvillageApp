@@ -68,3 +68,24 @@ export const myStockDetailState = atom<MyStockDetailState>({
     detail: null,
   },
 });
+
+export interface StockHistory {
+  stockId: number;
+  content: string;
+  stateName: 'DEPOSIT' | 'WITHDRAWL';
+  count: number;
+  countCount: number;
+  total: number;
+  createdAt: string;
+}
+
+interface StockHistoryListState {
+  items: StockHistory[] | [];
+}
+
+export const stockHistoryListState = atom<StockHistoryListState>({
+  key: 'stockHistoryListState',
+  default: {
+    items: [],
+  },
+});

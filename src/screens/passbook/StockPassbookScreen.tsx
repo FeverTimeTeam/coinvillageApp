@@ -16,6 +16,7 @@ import {useEffect} from 'react';
 import {useRecoilState} from 'recoil';
 import {savingsPassbookListState} from '../../atoms/savingsPassbook';
 import {myStockListState} from '../../atoms/stock';
+import LoadingScreen from '../../components/LoadingScreen';
 
 const StockPassbookScreen = () => {
   const navigation = useNavigation();
@@ -38,6 +39,7 @@ const StockPassbookScreen = () => {
 
   return (
     <View style={styles.block}>
+      <LoadingScreen />
       <View style={styles.marginHorizontal}>
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>

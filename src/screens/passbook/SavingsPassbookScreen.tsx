@@ -18,6 +18,7 @@ import {
   SavingsPassbook,
   savingsBillState,
 } from '../../atoms/savingsPassbook';
+import LoadingScreen from '../../components/LoadingScreen';
 
 const SavingsPassbookScreen = () => {
   const navigation = useNavigation();
@@ -46,6 +47,7 @@ const SavingsPassbookScreen = () => {
   const [moneyUnit, setMoneyUnit] = useState<number>(0);
   return (
     <View style={styles.block}>
+      <LoadingScreen />
       <View>
         <View style={styles.installmentContainer}>
           <View style={styles.totalMoneyContainer}>

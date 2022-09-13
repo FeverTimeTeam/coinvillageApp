@@ -12,35 +12,35 @@ import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import PassbookButton from '../../components/PassbookButton';
 import {axiosInstance} from '../../queries/index';
-import {basePassbookState} from '../../atoms/basePassbook';
+import {basePassbookListState} from '../../atoms/basePassbook';
 import {useRecoilState} from 'recoil';
 import LoadingScreen from '../../components/LoadingScreen';
 
 const BasePassbookScreen = () => {
   const navigation = useNavigation();
 
-  const [basePassbookListState, setBasePassbookListState] =
-    useRecoilState(basePassbookState);
+  const [basePassbookList, setBasePassbookList] = useRecoilState(
+    basePassbookListState,
+  );
 
   const [total, setTotal] = useState<number>(0);
 
-  const getBasePassbookList = () => {
-    axiosInstance
-      .get('/accounts')
-      .then(response => {
-        setBasePassbookListState({items: response.data.reverse()});
-        if (basePassbookListState) {
-          setTotal(basePassbookListState.items[0].accountTotal);
-        }
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
-
   useEffect(() => {
+    const getBasePassbookList = () => {
+      axiosInstance
+        .get('/accounts')
+        .then(response => {
+          setBasePassbookList({items: response.data.reverse()});
+          if (basePassbookListState) {
+            setTotal(basePassbookList.items[0].accountTotal);
+          }
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
     getBasePassbookList();
-  }, []);
+  }, [basePassbookList, setBasePassbookList]);
 
   const [balance, setBalance] = useState<number>(0);
 
@@ -67,7 +67,7 @@ const BasePassbookScreen = () => {
         <FlatList
           style={styles.detailContentList}
           ListFooterComponent={<View style={styles.footer} />}
-          data={basePassbookListState.items}
+          data={basePassbookList.items}
           renderItem={({item}) => (
             <View style={styles.detailContentContainer} key={item.accountId}>
               <View style={styles.dateContainer}>

@@ -11,12 +11,12 @@ export interface BasePassbook {
   accountTotal: number;
 }
 
-interface BasePassbookState {
+interface BasePassbookListState {
   items: BasePassbook[] | [];
 }
 
-export const basePassbookState = atom<BasePassbookState>({
-  key: 'basePassbookState',
+export const basePassbookListState = atom<BasePassbookListState>({
+  key: 'basePassbookListState',
   default: {
     items: [],
   },

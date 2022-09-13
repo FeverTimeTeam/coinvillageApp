@@ -17,6 +17,7 @@ import {useNavigation} from '@react-navigation/native';
 import {axiosInstance} from '../../queries';
 import {useRecoilState} from 'recoil';
 import {stockDetailState} from '../../atoms/stock';
+import ShadowEffect from '~/components/ShadowEffect';
 
 const InvestmentBuyScreen = ({route, navigation}) => {
   const {StatusBarManager} = NativeModules;
@@ -93,14 +94,16 @@ const InvestmentBuyScreen = ({route, navigation}) => {
         </Text>
       </ScrollView>
       <View>
-        <View style={[styles.itemContainer, styles.marginHorizontal]}>
-          <Text style={[styles.textSizeMid, styles.fontColor]}>
-            1주 당 금액
-          </Text>
-          <Text style={[styles.textSizeMid, styles.fontColor]}>
-            <Text style={styles.bold}>{stockDetail.detail?.price}</Text> 미소
-          </Text>
-        </View>
+        <ShadowEffect>
+          <View style={[styles.itemContainer, styles.marginHorizontal]}>
+            <Text style={[styles.textSizeMid, styles.fontColor]}>
+              1주 당 금액
+            </Text>
+            <Text style={[styles.textSizeMid, styles.fontColor]}>
+              <Text style={styles.bold}>{stockDetail.detail?.price}</Text> 미소
+            </Text>
+          </View>
+        </ShadowEffect>
         <View style={styles.buyFormWrapper}>
           <View style={[styles.buyForm]}>
             <View style={styles.amount}>
@@ -195,8 +198,6 @@ const styles = StyleSheet.create({
     color: `${color.system_warning}`,
   },
   informationContainer: {
-    // position: 'absolute',
-    // top: 15,
     marginBottom: 20,
   },
   itemContainer: {
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 26,
-    backgroundColor: `${color.light_gray2}`,
+    backgroundColor: `${color.light_gray3}`,
     height: 77,
     borderRadius: 15,
     marginBottom: 41,

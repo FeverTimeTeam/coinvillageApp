@@ -13,6 +13,7 @@ type Props = {
   offset?: Offset;
   radius?: number;
   children: ReactNode;
+  style: any;
 };
 
 const ShadowEffect: React.FC<Props> = ({
@@ -21,9 +22,10 @@ const ShadowEffect: React.FC<Props> = ({
   offset = {width: 3, height: 3},
   radius = 3,
   children,
+  style,
 }) => {
   return (
-    <View style={styles({shadowColor, opacity, offset, radius}).block}>
+    <View style={[styles({shadowColor, opacity, offset, radius}).block, style]}>
       {children}
     </View>
   );

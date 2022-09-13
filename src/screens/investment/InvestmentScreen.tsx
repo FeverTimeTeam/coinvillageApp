@@ -37,17 +37,19 @@ const InvestmentScreen = () => {
   return (
     <View style={styles.block}>
       <LoadingScreen />
-      <View style={styles.myInvestmentWrapper}>
-        <TouchableOpacity
-          style={styles.myInvestment}
-          onPress={() => {
-            navigation.navigate('MyInvestment');
-          }}>
-          <Text style={[styles.textColorWhite, styles.bold, styles.textBig]}>
-            My 투자
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <ShadowEffect>
+        <View style={styles.myInvestmentWrapper}>
+          <TouchableOpacity
+            style={styles.myInvestment}
+            onPress={() => {
+              navigation.navigate('MyInvestment');
+            }}>
+            <Text style={[styles.textColorWhite, styles.bold, styles.textBig]}>
+              My 투자
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ShadowEffect>
       <Text style={[styles.textHuge, styles.bold]}>종목</Text>
       <View>
         <FlatList
@@ -175,18 +177,6 @@ const styles = StyleSheet.create({
   },
   passbookButtonWrapper: {
     marginBottom: 11,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.warm_gray_deep}`, //그림자색
-        shadowOpacity: 0.2, //그림자 투명도
-        shadowOffset: {width: 2, height: 2}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
   },
   detailContentList: {},
   contentContainer: {

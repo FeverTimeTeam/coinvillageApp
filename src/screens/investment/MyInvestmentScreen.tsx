@@ -14,6 +14,7 @@ import {useRecoilState} from 'recoil';
 import {myStockListState} from '../../atoms/stock';
 import {axiosInstance} from '../../queries/index';
 import {useEffect} from 'react';
+import ShadowEffect from '~/components/ShadowEffect';
 
 const MyInvestmentScreen = () => {
   const navigation = useNavigation();
@@ -38,15 +39,17 @@ const MyInvestmentScreen = () => {
     <View style={styles.block}>
       <View style={styles.marginHorizontal}>
         <View style={styles.balanceWrapper}>
-          <View style={[styles.backgroundKb, styles.balance]}>
-            <Text style={[styles.textBig, styles.textColorWhite]}>
-              총{' '}
-              <Text style={styles.bold}>
-                {myStockList.items[0]?.stockTotal}{' '}
+          <ShadowEffect>
+            <View style={[styles.backgroundKb, styles.balance]}>
+              <Text style={[styles.textBig, styles.textColorWhite]}>
+                총{' '}
+                <Text style={styles.bold}>
+                  {myStockList.items[0]?.stockTotal}{' '}
+                </Text>
+                리브
               </Text>
-              리브
-            </Text>
-          </View>
+            </View>
+          </ShadowEffect>
         </View>
       </View>
       <View style={styles.marginHorizontal}>
@@ -58,19 +61,21 @@ const MyInvestmentScreen = () => {
           ListFooterComponent={<View style={styles.footer} />}
           data={myStockList.items}
           renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.contentContainer}
-              key={item.stockId}
-              onPress={() => {
-                navigation.navigate('InvestmentSell', {
-                  stockId: item.stockId,
-                });
-              }}>
-              <Text style={[styles.textMid]}>{item.content}</Text>
-              <Text style={[styles.bold, styles.textBig]}>
-                {item.buyCount}주
-              </Text>
-            </TouchableOpacity>
+            <ShadowEffect>
+              <TouchableOpacity
+                style={styles.contentContainer}
+                key={item.stockId}
+                onPress={() => {
+                  navigation.navigate('InvestmentSell', {
+                    stockId: item.stockId,
+                  });
+                }}>
+                <Text style={[styles.textMid]}>{item.content}</Text>
+                <Text style={[styles.bold, styles.textBig]}>
+                  {item.buyCount}주
+                </Text>
+              </TouchableOpacity>
+            </ShadowEffect>
           )}
         />
       </View>
@@ -131,18 +136,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginTop: 15,
     marginBottom: 32,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.warm_gray_deep}`, //그림자색
-        shadowOpacity: 0.1, //그림자 투명도
-        shadowOffset: {width: 1, height: 1}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
   },
   balance: {
     width: 117,
@@ -167,21 +160,6 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 13,
     marginBottom: 15,
-  },
-  passbookButtonWrapper: {
-    marginBottom: 11,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.warm_gray_deep}`, //그림자색
-        shadowOpacity: 0.2, //그림자 투명도
-        shadowOffset: {width: 2, height: 2}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
   },
   detailContentList: {},
   contentContainer: {

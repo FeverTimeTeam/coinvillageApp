@@ -1,4 +1,3 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {
   StyleSheet,
@@ -11,13 +10,14 @@ import {
   Text,
   useWindowDimensions,
 } from 'react-native';
-import PassbookButton from '../components/PassbookButton';
+import PassbookButton from '~/components/PassbookButton';
 import LinearGradient from 'react-native-linear-gradient';
-import Header from '../components/Header';
+import Header from '~/components/Header';
 import color from '../constants/color';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {useEffect} from 'react';
 import LoadingScreen from '../components/LoadingScreen';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -29,6 +29,8 @@ const HomeScreen = () => {
   //     setIsLoading(true);
   //   }, 1000);
   // }, []);
+
+  const [isHeartClicked, setIsHeartClicked] = useState<boolean>(false);
 
   return (
     <View style={styles.block}>
@@ -43,48 +45,54 @@ const HomeScreen = () => {
         /> */}
         <Header />
         <Image
-          source={require('../assets/images/world.png')}
+          source={require('~/assets/images/world.png')}
           style={styles.world}
           resizeMode="contain"
         />
         <Image
-          source={require('../assets/images/world_shadow.png')}
+          source={require('~/assets/images/world_shadow.png')}
           style={styles.shadow}
         />
-        <View style={styles.todayContainer}>
-          <TouchableOpacity style={styles.heartWrapper} onPress={() => {}}>
-            <Image
-              source={require('../assets/images/heart/heart.png')}
-              style={styles.heart}
-            />
-          </TouchableOpacity>
-          {/* <View style={dynamicStyles({boxSize}).todayBox}>
-            <Text>오늘의 정보</Text>
-          </View> */}
-        </View>
+        <TouchableOpacity
+          style={styles.heartWrapper}
+          onPress={() => {
+            setIsHeartClicked(prev => !prev);
+          }}>
+          <Image
+            source={require('~/assets/images/heart/heart.png')}
+            style={styles.heart}
+          />
+        </TouchableOpacity>
+        {isHeartClicked && (
+          <View style={styles.today}>
+            <Text style={styles.todayTitle}>오늘의 Talk</Text>
+            <Text style={styles.todayContent}>
+              선생님은 내일 본가 갈 예정 ㅎㅎ
+            </Text>
+          </View>
+        )}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
               navigation.navigate('Job');
             }}>
-            <Image source={require('../assets/images/buttons/job.png')} />
+            <Image source={require('~/assets/images/buttons/job.png')} />
           </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
               navigation.navigate('Investment');
             }}>
-            <Image
-              source={require('../assets/images/buttons/investment.png')}
-            />
+            <Image source={require('~/assets/images/buttons/investment.png')} />
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
               navigation.navigate('Passbook');
             }}>
-            <Image source={require('../assets/images/buttons/passbook.png')} />
+            <Image source={require('~/assets/images/buttons/passbook.png')} />
           </TouchableOpacity>
         </View>
       </LinearGradient>
@@ -126,8 +134,39 @@ const styles = StyleSheet.create({
     left: 74,
     top: 420,
   },
-  todayContainer: {
+  today: {
+    width: '90%',
     position: 'absolute',
+    top: 300,
+    zIndex: 3,
+    marginHorizontal: 15,
+    backgroundColor: 'rgba(200,200,200,0.5)',
+    height: 81,
+    borderRadius: 17,
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: `${color.warm_gray_deep}`, //그림자색
+        shadowOpacity: 0.8, //그림자 투명도
+        shadowOffset: {width: 5, height: 5}, //그림자 위치
+        shadowRadius: 3,
+      },
+      android: {
+        //ANDROID
+        elevation: 3,
+      },
+    }),
+  },
+  todayTitle: {
+    color: `${color.white}`,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  todayContent: {
+    color: `${color.white}`,
+    fontSize: 18,
   },
   heartWrapper: {
     position: 'absolute',

@@ -4,7 +4,7 @@ import color from '../../constants/color';
 
 const StockDetailScreen = ({route, navigation}) => {
   const {stockId, content, price, buyCount} = route.params;
-
+  // const priceHistory = usePriceHistory('ethereum');
   return (
     <View style={styles.block}>
       <Text
@@ -28,6 +28,7 @@ const StockDetailScreen = ({route, navigation}) => {
           <Text style={styles.bold}>{buyCount}</Text> 주
         </Text>
       </View>
+      {/* <LineGraph points={priceHistory} color="#4484B2" /> */}
     </View>
   );
 };

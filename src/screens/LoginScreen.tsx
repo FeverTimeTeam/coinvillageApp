@@ -27,7 +27,12 @@ const LoginScreen = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const login = () => {
+  const [loginButtonText, setLoginButtonText] = useState<
+    '로그인' | '마을 입장 중...'
+  >('로그인');
+
+  const login = async () => {
+    setLoginButtonText('마을 입장 중...');
     axiosInstance
       .post('/members/authenticate', {
         email: email,
@@ -39,6 +44,7 @@ const LoginScreen = () => {
         authStorage.set(response.data);
         setAuthUserState({user: response.data.memberResponseDto});
         axiosInstance.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+        setLoginButtonText('로그인');
         Alert.alert('로그인 되었습니다!', '마을로 입장해주세요', [
           {
             text: '마을 입장하기',
@@ -51,6 +57,7 @@ const LoginScreen = () => {
       })
       .catch(e => {
         console.log(e);
+        setLoginButtonText('로그인');
         Alert.alert('로그인 실패!', '아이디, 비밀번호가 일치하지 않습니다.', [
           {
             text: '확인',
@@ -70,7 +77,7 @@ const LoginScreen = () => {
         setStatusBarHeight(statusBarFrameData.height);
       });
     }
-  }, []);
+  }, [StatusBarManager]);
 
   return (
     <KeyboardAvoidingView
@@ -111,7 +118,7 @@ const LoginScreen = () => {
             setEmail('');
             setPassword('');
           }}>
-          <Text style={styles.loginText}>로그인</Text>
+          <Text style={styles.loginText}>{loginButtonText}</Text>
         </TouchableOpacity>
         <View style={styles.signupContainer}>
           <Text style={styles.signUpDescriptionText}>

@@ -13,7 +13,6 @@ import color from '../../constants/color';
 import {useEffect} from 'react';
 import {axiosInstance} from '../../queries/index';
 import {useNavigation} from '@react-navigation/native';
-import useGetBasePassbookList from '../../api/getBasePassbookList';
 import {useRecoilState} from 'recoil';
 import {basePassbookState} from '../../atoms/basePassbook';
 
@@ -34,7 +33,7 @@ const ConsumeScreen = () => {
   const [balance, setBalance] = useState<number>(537);
   const {content, count, price, total} = item;
 
-  const [basePassbookListState, setBasePassbookListState] =
+  const [basePassbookList, setBasePassbookList] =
     useRecoilState(basePassbookState);
 
   const getBasePassbookList = () => {
@@ -42,7 +41,7 @@ const ConsumeScreen = () => {
       .get('/accounts')
       .then(response => {
         console.log(response.data);
-        setBasePassbookListState({items: response.data.reverse()});
+        setBasePassbookList({items: response.data.reverse()});
       })
       .catch(e => {
         console.log(e);
@@ -54,7 +53,11 @@ const ConsumeScreen = () => {
       <View style={styles.balanceContainer}>
         <View style={styles.balanceView}>
           <Text style={styles.balanceText}>
-            잔액 <Text style={styles.bold}>{balance}</Text> 미소
+            잔액{' '}
+            <Text style={styles.bold}>
+              {basePassbookList.items[0].accountTotal}
+            </Text>{' '}
+            리브
           </Text>
         </View>
       </View>
@@ -118,14 +121,7 @@ const ConsumeScreen = () => {
                   count: 0,
                 });
               } else {
-                Alert.alert('Alert Title', 'My Alert Msg', [
-                  {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {text: 'OK', onPress: () => console.log('OK Pressed')},
-                ]);
+                console.log('숫자만 입력');
               }
             }}
           />
@@ -151,8 +147,8 @@ const ConsumeScreen = () => {
               .catch(e => {
                 console.log(e);
               });
+
             await getBasePassbookList();
-            navigation.pop();
           }}
         />
       </View>

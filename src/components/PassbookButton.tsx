@@ -25,7 +25,8 @@ const PassbookButton: React.FC<Props> = ({
       ]}
       android_ripple={{color: '#ededed'}}
       onPress={onPress}>
-      <Text style={styles({textColor, backgroundColor}).buttonText}>
+      <Text
+        style={styles({textColor, backgroundColor, borderColor}).buttonText}>
         {buttonText}
       </Text>
     </Pressable>

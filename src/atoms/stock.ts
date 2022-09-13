@@ -24,7 +24,6 @@ export interface StockDetail {
   content: string;
   description: string;
   price: number;
-  variable: number | null;
   createdAt: string;
 }
 
@@ -34,6 +33,37 @@ interface StockDetailState {
 
 export const stockDetailState = atom<StockDetailState>({
   key: 'stockDetailState',
+  default: {
+    detail: null,
+  },
+});
+
+export interface MyStock {
+  stockId: number;
+  content: string;
+  description: string;
+  price: number;
+  buyCount: number;
+  stockTotal: number;
+}
+
+interface MyStockListState {
+  items: MyStock[] | [];
+}
+
+export const myStockListState = atom<MyStockListState>({
+  key: 'myStockListState',
+  default: {
+    items: [],
+  },
+});
+
+interface MyStockDetailState {
+  detail: MyStock | null;
+}
+
+export const myStockDetailState = atom<MyStockDetailState>({
+  key: 'myStockDetailState',
   default: {
     detail: null,
   },

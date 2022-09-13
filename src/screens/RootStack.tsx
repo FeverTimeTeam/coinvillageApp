@@ -43,11 +43,11 @@ const RootStack = () => {
 
   useAuthLoadEffect();
 
-  useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
+  // useEffect(() => {
+  //   console.log(isLoading);
+  // }, [isLoading]);
 
-  console.log(firstScreenState.name);
+  // console.log(firstScreenState.name);
   return (
     isLoading.state === false && (
       <Stack.Navigator initialRouteName={firstScreenState.name}>

@@ -41,7 +41,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
         .get(`/stocks/${stockId}`)
         .then(response => {
           // setAllStockList({items: response.data.reverse()});
-          console.log(response.data);
+          // console.log(response.data);
           setStockDetail({detail: response.data});
         })
         .catch(e => {
@@ -51,6 +51,20 @@ const InvestmentBuyScreen = ({route, navigation}) => {
 
     getStockDetail();
   }, []);
+
+  const buyStock = () => {
+    axiosInstance
+      .post(`/stocks/${stockId}`, {
+        count: count,
+        total: total,
+      })
+      .then(response => {
+        // console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -94,7 +108,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
                 style={styles.input}
                 onChange={e => {
                   const tmpCount = parseInt(e.nativeEvent.text);
-                  if (!isNaN(tmpCount)) {
+                  if (!isNaN(tmpCount) && stockDetail.detail?.price) {
                     setCount(tmpCount);
                     setTotal(tmpCount * stockDetail.detail?.price);
                   } else if (e.nativeEvent.text === '') {
@@ -125,6 +139,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
                     {
                       text: '구매하기',
                       onPress: () => {
+                        buyStock();
                         navigation.pop();
                         Alert.alert('구매 완료!', `총 ${total} 미소 차감`, [
                           {
@@ -136,7 +151,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
                     },
                     {
                       text: '취소하기',
-                      onPress: () => console.log('Cancel Pressed'),
+                      onPress: () => {},
                       style: 'cancel',
                     },
                   ],

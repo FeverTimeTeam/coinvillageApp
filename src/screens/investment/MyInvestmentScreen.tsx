@@ -32,7 +32,7 @@ const MyInvestmentScreen = () => {
         });
     };
     getMyStockList();
-  }, [setMyStockList]);
+  }, [setMyStockList, myStockList]);
 
   return (
     <View style={styles.block}>

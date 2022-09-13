@@ -35,20 +35,6 @@ const InvestmentSellScreen = ({route, navigation}) => {
     }
   }, [StatusBarManager]);
 
-  const [myStockList, setMyStockList] = useRecoilState(myStockListState);
-
-  const getMyStockList = () => {
-    axiosInstance
-      .get('/stocks/mypage')
-      .then(response => {
-        console.log(response.data);
-        setMyStockList({items: response.data});
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
-
   useEffect(() => {
     const getMyStockDetail = () => {
       axiosInstance
@@ -151,17 +137,29 @@ const InvestmentSellScreen = ({route, navigation}) => {
               textColor="white"
               backgroundColor={color.kb}
               onPress={() => {
-                sellStock();
-                getMyStockList();
                 Alert.alert(
-                  `${myStockDetail.detail?.content} ${count}주 판매 완료!`,
-                  `총 ${total} 미소 차감`,
+                  `${myStockDetail.detail?.content} ${count}주 판매하시겠습니까?`,
+                  `총 ${total} 미소`,
                   [
                     {
-                      text: '확인',
+                      text: '팔기',
                       onPress: () => {
-                        navigation.pop();
+                        sellStock();
+                        // getMyStockList();
+                        Alert.alert('판매 완료!', `총 ${total} 미소`, [
+                          {
+                            text: '확인',
+                            onPress: () => {
+                              navigation.pop();
+                            },
+                          },
+                        ]);
                       },
+                    },
+                    {
+                      text: '취소하기',
+                      onPress: () => {},
+                      style: 'cancel',
                     },
                   ],
                 );

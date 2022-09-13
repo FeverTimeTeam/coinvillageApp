@@ -20,6 +20,7 @@ import {useEffect} from 'react';
 import LoadingScreen from '../components/LoadingScreen';
 import {useNavigation} from '@react-navigation/native';
 import Slide from '~/components/Slide';
+import ShadowEffect from '~/components/ShadowEffect';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -35,7 +36,6 @@ const HomeScreen = () => {
         locations={[0, 0.5]}
         style={styles.inner}>
         <Header />
-
         <TouchableOpacity
           style={styles.heartWrapper}
           onPress={() => {
@@ -46,7 +46,6 @@ const HomeScreen = () => {
             style={styles.heart}
           />
         </TouchableOpacity>
-
         <Image
           source={require('~/assets/images/world.png')}
           style={styles.world}
@@ -65,28 +64,35 @@ const HomeScreen = () => {
           </View>
         )}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate('Job');
-            }}>
-            <Image source={require('~/assets/images/buttons/job.png')} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate('Investment');
-            }}>
-            <Image source={require('~/assets/images/buttons/investment.png')} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate('Passbook');
-            }}>
-            <Image source={require('~/assets/images/buttons/passbook.png')} />
-          </TouchableOpacity>
+          <ShadowEffect>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate('Job');
+              }}>
+              <Image source={require('~/assets/images/buttons/job.png')} />
+            </TouchableOpacity>
+          </ShadowEffect>
+          <ShadowEffect>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate('Investment');
+              }}>
+              <Image
+                source={require('~/assets/images/buttons/investment.png')}
+              />
+            </TouchableOpacity>
+          </ShadowEffect>
+          <ShadowEffect>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                navigation.navigate('Passbook');
+              }}>
+              <Image source={require('~/assets/images/buttons/passbook.png')} />
+            </TouchableOpacity>
+          </ShadowEffect>
         </View>
       </LinearGradient>
     </View>
@@ -111,12 +117,6 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
   },
-  // rectangle: {
-  //   backgroundColor: 'white',
-  //   zIndex: 3,
-  //   width: 100,
-  //   height: 100,
-  // },
   inner: {
     flex: 1,
     paddingTop: 50,
@@ -181,18 +181,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.warm_gray_deep}`, //그림자색
-        shadowOpacity: 0.3, //그림자 투명도
-        shadowOffset: {width: 3, height: 3}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
   },
 });
 

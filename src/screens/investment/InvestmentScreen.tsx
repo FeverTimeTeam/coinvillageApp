@@ -14,6 +14,7 @@ import {axiosInstance} from '../../queries';
 import {useRecoilState} from 'recoil';
 import {allStockListState} from '../../atoms/stock';
 import LoadingScreen from '../../components/LoadingScreen';
+import ShadowEffect from '~/components/ShadowEffect';
 
 const InvestmentScreen = () => {
   const navigation = useNavigation();
@@ -54,28 +55,30 @@ const InvestmentScreen = () => {
           ListFooterComponent={<View style={styles.footer} />}
           data={allStockList.items}
           renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.contentContainer}
-              key={item.stockId}
-              onPress={() => {
-                navigation.push('InvestmentBuy', {
-                  stockId: item.stockId,
-                  content: item.content,
-                });
-              }}>
-              <Text style={[styles.textMid]}>{item.content}</Text>
-              {item.gap > 0 ? (
-                <Text style={[styles.up, styles.bold, styles.textBig]}>
-                  +{item.percent.toFixed(2)}%
-                </Text>
-              ) : item.gap < 0 ? (
-                <Text style={[styles.down, styles.bold, styles.textBig]}>
-                  {item.percent.toFixed(2)}%
-                </Text>
-              ) : (
-                <Text style={[styles.bold, styles.textHuge]}>-</Text>
-              )}
-            </TouchableOpacity>
+            <ShadowEffect>
+              <TouchableOpacity
+                style={styles.contentContainer}
+                key={item.stockId}
+                onPress={() => {
+                  navigation.push('InvestmentBuy', {
+                    stockId: item.stockId,
+                    content: item.content,
+                  });
+                }}>
+                <Text style={[styles.textMid]}>{item.content}</Text>
+                {item.gap > 0 ? (
+                  <Text style={[styles.up, styles.bold, styles.textBig]}>
+                    +{item.percent.toFixed(2)}%
+                  </Text>
+                ) : item.gap < 0 ? (
+                  <Text style={[styles.down, styles.bold, styles.textBig]}>
+                    {item.percent.toFixed(2)}%
+                  </Text>
+                ) : (
+                  <Text style={[styles.bold, styles.textHuge]}>-</Text>
+                )}
+              </TouchableOpacity>
+            </ShadowEffect>
           )}
         />
       </View>
@@ -146,24 +149,6 @@ const styles = StyleSheet.create({
     height: 45,
     width: 102,
   },
-  balanceWrapper: {
-    display: 'flex',
-    alignItems: 'flex-end',
-    marginTop: 15,
-    marginBottom: 32,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.warm_gray_deep}`, //그림자색
-        shadowOpacity: 0.1, //그림자 투명도
-        shadowOffset: {width: 1, height: 1}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
-  },
   balance: {
     width: 117,
     height: 35,
@@ -215,18 +200,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     borderRadius: 16,
     marginBottom: 16,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.warm_gray_deep}`, //그림자색
-        shadowOpacity: 0.2, //그림자 투명도
-        shadowOffset: {width: 2, height: 3}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
   },
 });
 

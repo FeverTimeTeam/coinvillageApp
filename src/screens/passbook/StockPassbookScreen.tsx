@@ -57,30 +57,48 @@ const StockPassbookScreen = () => {
             *종목 구매는 ‘투자' 탭에서 이루어집니다.
           </Text>
         </View>
-        <View style={styles.passbookButtonWrapper}>
-          <PassbookButton
-            buttonText="입금하기"
-            textColor={color.green}
-            backgroundColor={color.light_green2}
-            borderColor={color.light_green2}
-            onPress={() => {
-              navigation.navigate('StockPassbookDeposit', {
-                stockTotal: myStockList.items[0]?.stockTotal,
-              });
-            }}
-          />
+        <View style={styles.buttonContainer}>
+          <View style={styles.passbookButtonWrapper}>
+            <PassbookButton
+              buttonText="이체하기"
+              textColor={color.green}
+              backgroundColor={color.white}
+              borderColor={color.light_green3}
+              onPress={() => {
+                navigation.navigate('StockPassbookWithdrawal', {
+                  stockTotal: myStockList.items[0]?.stockTotal,
+                });
+              }}
+            />
+          </View>
+          <View style={styles.passbookButtonWrapper}>
+            <PassbookButton
+              buttonText="입금하기"
+              textColor={color.green}
+              backgroundColor={color.light_green2}
+              borderColor={color.light_green2}
+              onPress={() => {
+                navigation.navigate('StockPassbookDeposit', {
+                  stockTotal: myStockList.items[0]?.stockTotal,
+                });
+              }}
+            />
+          </View>
         </View>
-        <View style={styles.passbookButtonWrapper}>
-          <PassbookButton
-            buttonText="거래내역"
-            textColor={color.green}
-            backgroundColor={color.white}
-            borderColor={color.light_green3}
-            onPress={() => {
-              navigation.navigate('StockTransaction');
-            }}
-          />
-        </View>
+        <TouchableOpacity
+          style={styles.transactionButton}
+          onPress={() => {
+            navigation.navigate('StockTransaction');
+          }}>
+          <Text
+            style={[
+              styles.transactionText,
+              styles.textBig,
+              styles.textColorGreen,
+            ]}>
+            거래 내역 확인
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.separatorBar} />
       <View style={styles.marginHorizontal}>
@@ -157,6 +175,22 @@ const styles = StyleSheet.create({
     height: 7,
     backgroundColor: `${color.light_gray3}`,
   },
+  transactionButton: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    marginBottom: 10,
+  },
+  transactionText: {
+    textDecorationLine: 'underline',
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
   balanceWrapper: {
     display: 'flex',
     alignItems: 'flex-end',
@@ -200,6 +234,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   passbookButtonWrapper: {
+    width: '47%',
     marginBottom: 11,
     ...Platform.select({
       ios: {

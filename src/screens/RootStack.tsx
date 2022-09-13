@@ -33,6 +33,7 @@ import InvestmentBuyScreen from './investment/InvestmentBuyScreen';
 import InvestmentSellScreen from './investment/InvestmentSellScreen';
 import SignUpWebViewScreen from './SignUpWebViewScreen';
 import SelectJobIconScreen from './jobScreen/SelectJobIconScreen';
+import StockPassbookWithdrawalScreen from './passbook/StockPassbookWithdrawalScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -208,6 +209,11 @@ const RootStack = () => {
         <Stack.Screen
           name="StockPassbookDeposit"
           component={StockPassbookDepositScreen}
+          options={{title: '주식 통장'}}
+        />
+        <Stack.Screen
+          name="StockPassbookWithdrawal"
+          component={StockPassbookWithdrawalScreen}
           options={{title: '주식 통장'}}
         />
         <Stack.Screen

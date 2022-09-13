@@ -5,8 +5,9 @@ import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import {axiosInstance} from '../../queries/index';
 
-const StockPassbookDepositScreen = () => {
-  const navigation = useNavigation();
+const StockPassbookDepositScreen = ({route, navigation}) => {
+  // const navigation = useNavigation();
+  const {stockTotal} = route.params;
   const [total, setTotal] = useState<number>(0);
 
   return (
@@ -15,7 +16,7 @@ const StockPassbookDepositScreen = () => {
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>
             <Text style={[styles.textBig]}>
-              총 <Text style={styles.bold}>537 </Text>미소
+              총 <Text style={styles.bold}>{stockTotal} </Text>리브
             </Text>
           </View>
         </View>

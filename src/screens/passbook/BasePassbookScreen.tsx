@@ -14,6 +14,7 @@ import PassbookButton from '../../components/PassbookButton';
 import {axiosInstance} from '../../queries/index';
 import {basePassbookState} from '../../atoms/basePassbook';
 import {useRecoilState} from 'recoil';
+import LoadingScreen from '../../components/LoadingScreen';
 
 const BasePassbookScreen = () => {
   const navigation = useNavigation();
@@ -45,6 +46,7 @@ const BasePassbookScreen = () => {
 
   return (
     <View style={styles.block}>
+      <LoadingScreen />
       <View>
         <View style={styles.balanceContainer}>
           <Text style={styles.balanceText}>현재 잔액</Text>

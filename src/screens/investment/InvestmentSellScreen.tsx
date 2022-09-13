@@ -151,22 +151,17 @@ const InvestmentSellScreen = ({route, navigation}) => {
               textColor="white"
               backgroundColor={color.kb}
               onPress={() => {
+                sellStock();
+                getMyStockList();
                 Alert.alert(
-                  `${myStockDetail.detail?.content}를 ${count}주 팔겠습니까?`,
+                  `${myStockDetail.detail?.content} ${count}주 판매 완료!`,
                   `총 ${total} 미소 차감`,
                   [
                     {
-                      text: '팔기',
-                      onPress: async () => {
-                        sellStock();
-                        await getMyStockList();
+                      text: '확인',
+                      onPress: () => {
                         navigation.pop();
                       },
-                    },
-                    {
-                      text: '취소하기',
-                      onPress: () => {},
-                      style: 'cancel',
                     },
                   ],
                 );

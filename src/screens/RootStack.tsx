@@ -220,14 +220,14 @@ const RootStack = () => {
           component={StockTransactionScreen}
           options={{
             title: '거래 내역',
-            headerRight: () => (
-              <Button
-                onPress={() => {
-                  navigation.navigate('StockPassbook');
-                }}
-                title="적용"
-              />
-            ),
+            // headerRight: () => (
+            //   <Button
+            //     onPress={() => {
+            //       navigation.navigate('StockPassbook');
+            //     }}
+            //     title="적용"
+            //   />
+            // ),
           }}
         />
       </Stack.Navigator>

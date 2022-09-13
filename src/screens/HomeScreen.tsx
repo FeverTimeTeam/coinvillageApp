@@ -23,12 +23,6 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const dimensions = useWindowDimensions();
   const boxSize = dimensions.width - 20;
-  // const [isLoading, setIsLoading] = useState<boolean>(false);
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     setIsLoading(true);
-  //   }, 1000);
-  // }, []);
 
   const [isHeartClicked, setIsHeartClicked] = useState<boolean>(false);
 
@@ -38,11 +32,6 @@ const HomeScreen = () => {
         colors={['white', '#FFFCB7']}
         locations={[0, 0.5]}
         style={styles.inner}>
-        {/* <Spinner
-          visible={!isLoading}
-          textContent={'Loading...'}
-          textStyle={styles.spinnerTextStyle}
-        /> */}
         <Header />
         <Image
           source={require('~/assets/images/world.png')}

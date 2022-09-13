@@ -10,68 +10,41 @@ import {
 import PassbookButton from '../../components/PassbookButton';
 import {useNavigation} from '@react-navigation/native';
 import color from '../../constants/color';
+import {useRecoilState} from 'recoil';
+import {myStockListState} from '../../atoms/stock';
+import {axiosInstance} from '../../queries/index';
+import {useEffect} from 'react';
 
 const MyInvestmentScreen = () => {
   const navigation = useNavigation();
-  const [stockPassbookList, setStockPassbookList] = useState([
-    {
-      stockId: 0,
-      content: '선생님 몸무게',
-      amount: 2,
-    },
-    {
-      stockId: 1,
-      content: '학급 총 지각 횟수',
-      amount: 34,
-    },
-    {
-      stockId: 2,
-      content: '선생님 손소독 횟수',
-      amount: 234,
-    },
-    {
-      stockId: 3,
-      content: '선생님 몸무게',
-      amount: 1,
-    },
-    {
-      stockId: 4,
-      content: '선생님 몸무게',
-      amount: 45,
-    },
-    {
-      stockId: 5,
-      content: '선생님 몸무게',
-      amount: 5,
-    },
-    {
-      stockId: 6,
-      content: '선생님 손소독 횟수',
-      amount: 234,
-    },
-    {
-      stockId: 7,
-      content: '선생님 몸무게',
-      amount: 1,
-    },
-    {
-      stockId: 8,
-      content: '선생님 몸무게',
-      amount: 45,
-    },
-    {
-      stockId: 9,
-      content: '선생님 몸무게',
-      amount: 5,
-    },
-  ]);
+  const [myStockList, setMyStockList] = useRecoilState(myStockListState);
+
+  useEffect(() => {
+    const getMyStockList = () => {
+      axiosInstance
+        .get('/stocks/mypage')
+        .then(response => {
+          console.log(response.data);
+          setMyStockList({items: response.data});
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getMyStockList();
+  }, [setMyStockList]);
+
   return (
     <View style={styles.block}>
       <View style={styles.marginHorizontal}>
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundKb, styles.balance]}>
             <Text style={[styles.textBig, styles.textColorWhite]}>
-              총 <Text style={styles.bold}>537 </Text>미소
+              총{' '}
+              <Text style={styles.bold}>
+                {myStockList.items[0]?.stockTotal}{' '}
+              </Text>
+              리브
             </Text>
           </View>
         </View>
@@ -83,7 +56,7 @@ const MyInvestmentScreen = () => {
         <FlatList
           style={[styles.detailContentList]}
           ListFooterComponent={<View style={styles.footer} />}
-          data={stockPassbookList}
+          data={myStockList.items}
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.contentContainer}
@@ -91,12 +64,12 @@ const MyInvestmentScreen = () => {
               onPress={() => {
                 navigation.navigate('InvestmentSell', {
                   stockId: item.stockId,
-                  content: item.content,
-                  amount: item.amount,
                 });
               }}>
               <Text style={[styles.textMid]}>{item.content}</Text>
-              <Text style={[styles.bold, styles.textBig]}>{item.amount}주</Text>
+              <Text style={[styles.bold, styles.textBig]}>
+                {item.buyCount}주
+              </Text>
             </TouchableOpacity>
           )}
         />

@@ -3,8 +3,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import color from '../../constants/color';
 
 const StockDetailScreen = ({route, navigation}) => {
-  const {stockId, content, amount} = route.params;
-  const [price, setPrice] = useState(10);
+  const {stockId, content, price, buyCount} = route.params;
+
   return (
     <View style={styles.block}>
       <Text
@@ -19,13 +19,13 @@ const StockDetailScreen = ({route, navigation}) => {
       <View style={[styles.itemContainer]}>
         <Text style={[styles.textSizeMid, styles.fontColor]}>1주 당 금액</Text>
         <Text style={[styles.textSizeMid, styles.fontColor]}>
-          <Text style={styles.bold}>{price}</Text> 미소
+          <Text style={styles.bold}>{price}</Text> 리브
         </Text>
       </View>
       <View style={[styles.itemContainer]}>
         <Text style={[styles.textSizeMid, styles.fontColor]}>구입한 주</Text>
         <Text style={[styles.textSizeMid, styles.fontColor]}>
-          <Text style={styles.bold}>{amount}</Text> 주
+          <Text style={styles.bold}>{buyCount}</Text> 주
         </Text>
       </View>
     </View>

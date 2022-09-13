@@ -17,6 +17,9 @@ import {jobProfileState} from '../../atoms/jobProfile';
 import {useEffect} from 'react';
 import jobStorage from '../../storages/jobStorage';
 import {useNavigation} from '@react-navigation/native';
+import ShadowEffect from '../../components/ShadowEffect';
+import FormData from 'form-data';
+import {axiosInstance} from '../../queries/index';
 
 const JobScreen = () => {
   const navigation = useNavigation();
@@ -24,7 +27,21 @@ const JobScreen = () => {
   const [authUserState, setAuthUserState] = useRecoilState(authState);
   const [profile, setProfile] = useRecoilState(jobProfileState);
 
-  const jobImage = 'coin';
+  useEffect(() => {
+    const getProfileImage = () => {
+      axiosInstance
+        .get('/members/profile')
+        .then(response => {
+          console.log(response.data.profileUrl);
+          setProfile({uri: response.data.profileUrl});
+          jobStorage.set(response.data.profileUrl);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getProfileImage();
+  }, []);
 
   const onSelectImage = () => {
     launchImageLibrary(
@@ -40,82 +57,104 @@ const JobScreen = () => {
         }
         if (res.assets) {
           setProfile({uri: res?.assets[0]?.uri});
+          // console.log(res.assets[0]);
           jobStorage.set(res?.assets[0]?.uri);
+          const formData = new FormData();
+          formData.append('file', {
+            uri: res?.assets[0]?.uri,
+            name: res?.assets[0]?.fileName,
+          });
+          axiosInstance
+            .put('/members/profile', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            })
+            .then(response => {
+              // console.log(response.data);
+            })
+            .catch(e => {
+              console.log(e);
+            });
         }
       },
     );
   };
 
-  useEffect(() => {
-    console.log(profile.uri);
-  }, [profile]);
+  // useEffect(() => {
+  //   console.log(profile.uri);
+  // }, [profile]);
 
   return (
     <View style={styles.block}>
-      <CardFlip
-        style={styles.cardContainer}
-        ref={card => (this.card = card)}
-        flipDirection="y">
-        <TouchableOpacity
-          style={[styles.card, styles.cardFront]}
-          onPress={() => this.card.flip()}>
-          {profile.uri ? (
-            <Image style={styles.circle} source={{uri: profile.uri}} />
-          ) : (
-            <Image
-              style={styles.circle}
-              source={require('../../assets/images/profile.png')}
-            />
-          )}
+      <ShadowEffect offset={{width: 5, height: 5}}>
+        <CardFlip
+          style={styles.cardContainer}
+          ref={card => (this.card = card)}
+          flipDirection="y">
+          <TouchableOpacity
+            style={[styles.card, styles.cardFront]}
+            onPress={() => this.card.flip()}>
+            {profile.uri ? (
+              <Image style={styles.circle} source={{uri: profile.uri}} />
+            ) : (
+              <Image
+                style={styles.circle}
+                source={require('../../assets/images/profile.png')}
+              />
+            )}
 
-          <Text style={[styles.text, styles.bold, styles.name]}>
-            {authUserState.user?.nickname}
-          </Text>
-          <Text style={[styles.text, styles.jobName]}>
-            {authUserState.user?.jobName}
-          </Text>
-          <View style={styles.settingButtonWrapper}>
-            <TouchableOpacity onPress={onSelectImage}>
-              <Image
-                source={require('../../assets/images/setting_white.png')}
-              />
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.card, styles.cardBack]}
-          onPress={() => this.card.flip()}>
-          <Image
-            source={require('../../assets/images/job_icons/base_icon/base_icon.png')}
-          />
-          <View style={styles.jobDescriptionContainer}>
-            <Text style={[styles.text, styles.bold, styles.bigText]}>
-              하는 일
+            <Text style={[styles.text, styles.bold, styles.name]}>
+              {authUserState.user?.nickname}
             </Text>
-            <Text
-              style={[styles.text, styles.smallText, styles.jobDescription]}>
-              {authUserState.user?.jobContent}
+            <Text style={[styles.text, styles.jobName]}>
+              {authUserState.user?.jobName}
             </Text>
-          </View>
-          <View style={styles.paycheckContainer}>
-            <Text style={[styles.text, styles.bold, styles.bigText]}>월급</Text>
-            <Text style={[styles.text, styles.bigText]}>
-              <Text style={styles.bold}>{authUserState.user?.payCheck}</Text>{' '}
-              리브
-            </Text>
-          </View>
-          <View style={styles.settingButtonWrapper}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('SelectJobIcon');
-              }}>
-              <Image
-                source={require('../../assets/images/select_icon/select_icon.png')}
-              />
-            </TouchableOpacity>
-          </View>
-        </TouchableOpacity>
-      </CardFlip>
+            <View style={styles.settingButtonWrapper}>
+              <TouchableOpacity onPress={onSelectImage}>
+                <Image
+                  source={require('../../assets/images/setting_white.png')}
+                />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.card, styles.cardBack]}
+            onPress={() => this.card.flip()}>
+            <Image
+              source={require('../../assets/images/job_icons/base_icon/base_icon.png')}
+            />
+            <View style={styles.jobDescriptionContainer}>
+              <Text style={[styles.text, styles.bold, styles.bigText]}>
+                하는 일
+              </Text>
+              <Text
+                style={[styles.text, styles.smallText, styles.jobDescription]}>
+                {authUserState.user?.jobContent}
+              </Text>
+            </View>
+            <View style={styles.paycheckContainer}>
+              <Text style={[styles.text, styles.bold, styles.bigText]}>
+                월급
+              </Text>
+              <Text style={[styles.text, styles.bigText]}>
+                <Text style={styles.bold}>{authUserState.user?.payCheck}</Text>{' '}
+                리브
+              </Text>
+            </View>
+            <View style={styles.settingButtonWrapper}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('SelectJobIcon');
+                }}>
+                <Image
+                  source={require('../../assets/images/select_icon/select_icon.png')}
+                />
+              </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </CardFlip>
+      </ShadowEffect>
     </View>
   );
 };

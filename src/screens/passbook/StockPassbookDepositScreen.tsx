@@ -1,5 +1,13 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  KeyboardAvoidingView,
+  NativeModules,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
@@ -10,8 +18,20 @@ const StockPassbookDepositScreen = ({route, navigation}) => {
   const {stockTotal} = route.params;
   const [total, setTotal] = useState<number>(0);
 
+  const {StatusBarManager} = NativeModules;
+  const [statusBarHeight, setStatusBarHeight] = useState(0);
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+      StatusBarManager.getHeight(statusBarFrameData => {
+        setStatusBarHeight(statusBarFrameData.height);
+      });
+    }
+  }, [StatusBarManager]);
   return (
-    <View style={styles.block}>
+    <KeyboardAvoidingView
+      style={styles.block}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={statusBarHeight + 44}>
       <View>
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>
@@ -63,7 +83,7 @@ const StockPassbookDepositScreen = ({route, navigation}) => {
           />
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -72,7 +92,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: `${color.white}`,
     paddingHorizontal: 16,
-    paddingBottom: 48,
     display: 'flex',
     justifyContent: 'space-between',
   },
@@ -127,7 +146,7 @@ const styles = StyleSheet.create({
   },
   passbookButtonWrapper: {
     marginTop: 13,
-    marginBottom: 15,
+    marginBottom: 50,
   },
 });
 

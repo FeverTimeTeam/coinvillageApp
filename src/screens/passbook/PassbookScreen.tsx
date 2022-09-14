@@ -19,35 +19,34 @@ import {basePassbookListState} from '../../atoms/basePassbook';
 
 const PassbookScreen = () => {
   const navigation = useNavigation();
-  const [authUserState, setAuthUserState] = useRecoilState(authState);
-  const [basePassbookList, setBasePassbookList] = useRecoilState(
-    basePassbookListState,
-  );
+  const [authUser, setAuthUser] = useRecoilState(authState);
+
   return (
     <ScrollView style={styles.block}>
-      <ShadowEffect>
-        <View style={styles.informationTextContainer}>
-          <Text style={styles.informationText}>
-            *월급은 자동으로 입출금 통장에 입금됩니다.
-          </Text>
-          <Text style={styles.informationText}>
-            받은 월급으로 소비, 적금, 투자가 가능합니다.
-          </Text>
-        </View>
-      </ShadowEffect>
-      <ShadowEffect>
-        <View style={styles.property}>
-          <Text style={styles.propertyText}>
-            {basePassbookList?.items[0]?.property}
-          </Text>
+      <View style={styles.informationTextContainer}>
+        <Text style={styles.informationText}>
+          * 월급은 자동으로 입출금 통장에 입금됩니다.
+        </Text>
+        <Text style={styles.informationText}>
+          받은 월급으로 소비, 적금, 투자가 가능합니다.
+        </Text>
+      </View>
+      <ShadowEffect shadowColor={color.warm_gray1}>
+        <View style={styles.propertyContainer}>
+          <View style={styles.title}>
+            <Text>나의 총 재산</Text>
+          </View>
+          <View style={styles.property}>
+            <ShadowEffect>
+              <Text style={styles.propertyText}>
+                {authUser.user?.property} 리브
+              </Text>
+            </ShadowEffect>
+          </View>
         </View>
       </ShadowEffect>
       <Pressable
-        style={({pressed}) => [
-          styles.passbookButton,
-          Platform.OS === 'ios' &&
-            pressed && {backgroundColor: color.light_gray},
-        ]}
+        style={styles.passbookButton}
         android_ripple={{color: '#ededed'}}
         onPress={() => {
           navigation.push('BasePassbook');
@@ -58,20 +57,14 @@ const PassbookScreen = () => {
             source={require('../../assets/images/savingsAccount.png')}
             resizeMode="contain">
             <Text style={[styles.country, {color: color.kb}]}>
-              {authUserState.user?.countryName} 은행
+              {authUser.user?.countryName} 은행
             </Text>
-            <Text style={styles.username}>
-              {authUserState.user?.nickname}님
-            </Text>
+            <Text style={styles.username}>{authUser.user?.nickname}님</Text>
           </ImageBackground>
         </ShadowEffect>
       </Pressable>
       <Pressable
-        style={({pressed}) => [
-          styles.passbookButton,
-          Platform.OS === 'ios' &&
-            pressed && {backgroundColor: color.light_gray},
-        ]}
+        style={styles.passbookButton}
         android_ripple={{color: '#ededed'}}
         onPress={() => {
           navigation.push('SavingsPassbook');
@@ -82,20 +75,14 @@ const PassbookScreen = () => {
             source={require('../../assets/images/installmentAccount.png')}
             resizeMode="contain">
             <Text style={[styles.country, {color: color.apricot}]}>
-              {authUserState.user?.countryName} 은행
+              {authUser.user?.countryName} 은행
             </Text>
-            <Text style={styles.username}>
-              {authUserState.user?.nickname}님
-            </Text>
+            <Text style={styles.username}>{authUser.user?.nickname}님</Text>
           </ImageBackground>
         </ShadowEffect>
       </Pressable>
       <Pressable
-        style={({pressed}) => [
-          styles.passbookButton,
-          Platform.OS === 'ios' &&
-            pressed && {backgroundColor: color.light_gray},
-        ]}
+        style={styles.passbookButton}
         android_ripple={{color: '#ededed'}}
         onPress={() => {
           navigation.push('StockPassbook');
@@ -106,11 +93,9 @@ const PassbookScreen = () => {
             source={require('../../assets/images/investmentAccount.png')}
             resizeMode="contain">
             <Text style={[styles.country, {color: color.light_green}]}>
-              {authUserState.user?.countryName} 은행
+              {authUser.user?.countryName} 은행
             </Text>
-            <Text style={styles.username}>
-              {authUserState.user?.nickname}님
-            </Text>
+            <Text style={styles.username}>{authUser.user?.nickname}님</Text>
           </ImageBackground>
         </ShadowEffect>
       </Pressable>
@@ -150,16 +135,39 @@ const styles = StyleSheet.create({
     height: 10,
   },
   informationTextContainer: {
-    height: 80,
+    height: 60,
     marginTop: 10,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: color.light_gray3,
     borderRadius: 15,
+    backgroundColor: `${color.light_gray3}`,
   },
   informationText: {
-    fontSize: 18,
+    fontSize: 16,
+  },
+  propertyContainer: {
+    marginTop: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 15,
+    backgroundColor: `${color.kb}`,
+    paddingHorizontal: 22,
+    paddingVertical: 16,
+  },
+  title: {
+    display: 'flex',
+    width: '100%',
+  },
+  property: {
+    display: 'flex',
+    width: '100%',
+  },
+  propertyText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: `${color.white}`,
   },
 });
 

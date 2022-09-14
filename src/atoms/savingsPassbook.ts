@@ -6,6 +6,9 @@ export interface SavingsPassbook {
   createdAt: string;
   content: string | null;
   total: string;
+  interest: number;
+  stateName: 'DEPOSIT' | 'WITHDRAWL';
+  maturity: number;
 }
 
 interface SavingsPassbookListState {
@@ -29,3 +32,13 @@ export const savingsBillState = atom<SavingsBillState>({
     bill: 0,
   },
 });
+
+export const maturityMoneyState = atom<number>({
+  key: 'maturityMoney',
+  default: 0,
+});
+
+// export const isMaturityState = atom<boolean>({
+//   key: 'isMaturityState',
+//   default: false,
+// });

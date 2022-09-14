@@ -148,7 +148,7 @@ const SavingsSettingScreen = ({route, navigation}) => {
                   }
                 }}
               />
-              <Text style={styles.selectText}>미소씩</Text>
+              <Text style={styles.selectText}>리브씩</Text>
             </View>
           )}
         </View>
@@ -197,7 +197,7 @@ const SavingsSettingScreen = ({route, navigation}) => {
                   }
                 }}
               />
-              <Text style={styles.selectText}>미소씩</Text>
+              <Text style={styles.selectText}>리브씩</Text>
             </View>
           )}
         </View>

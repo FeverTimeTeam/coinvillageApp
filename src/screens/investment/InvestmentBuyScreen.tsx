@@ -100,7 +100,7 @@ const InvestmentBuyScreen = ({route, navigation}) => {
               1주 당 금액
             </Text>
             <Text style={[styles.textSizeMid, styles.fontColor]}>
-              <Text style={styles.bold}>{stockDetail.detail?.price}</Text> 미소
+              <Text style={styles.bold}>{stockDetail.detail?.price}</Text> 리브
             </Text>
           </View>
         </ShadowEffect>
@@ -137,14 +137,14 @@ const InvestmentBuyScreen = ({route, navigation}) => {
               onPress={() => {
                 Alert.alert(
                   `${stockDetail.detail?.content}를 ${count}주 구매하시겠습니까?`,
-                  `총 ${total} 미소 차감`,
+                  `총 ${total} 리브 차감`,
                   [
                     {
                       text: '구매하기',
                       onPress: () => {
                         buyStock();
                         navigation.pop();
-                        Alert.alert('구매 완료!', `총 ${total} 미소 차감`, [
+                        Alert.alert('구매 완료!', `총 ${total} 리브 차감`, [
                           {
                             text: '확인',
                             onPress: () => {},

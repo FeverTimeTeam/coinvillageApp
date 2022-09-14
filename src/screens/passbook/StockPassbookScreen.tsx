@@ -22,6 +22,7 @@ import TotalMoneyView from '~/components/TotalMoneyView';
 const StockPassbookScreen = () => {
   const navigation = useNavigation();
   const [myStockList, setMyStockList] = useRecoilState(myStockListState);
+  const [total, setTotal] = useState<number>(0);
 
   useEffect(() => {
     const getMyStockList = () => {
@@ -30,13 +31,16 @@ const StockPassbookScreen = () => {
         .then(response => {
           console.log(response.data);
           setMyStockList({items: response.data});
+          if (myStockList) {
+            setTotal(myStockList.items[0].stockTotal);
+          }
         })
         .catch(e => {
           console.log(e);
         });
     };
     getMyStockList();
-  }, [setMyStockList]);
+  }, [setMyStockList, myStockList]);
 
   return (
     <View style={styles.block}>
@@ -64,7 +68,7 @@ const StockPassbookScreen = () => {
               borderColor={color.light_green3}
               onPress={() => {
                 navigation.navigate('StockPassbookWithdrawal', {
-                  stockTotal: myStockList.items[0]?.stockTotal,
+                  stockTotal: total,
                 });
               }}
             />

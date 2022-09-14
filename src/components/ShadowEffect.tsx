@@ -13,7 +13,7 @@ type Props = {
   offset?: Offset;
   radius?: number;
   children: ReactNode;
-  style: any;
+  style?: any;
 };
 
 const ShadowEffect: React.FC<Props> = ({

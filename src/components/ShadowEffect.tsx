@@ -41,10 +41,13 @@ const styles = (value: {
     block: {
       ...Platform.select({
         ios: {
-          shadowColor: `${color.warm_gray_deep}`, //그림자색
-          shadowOpacity: 0.3, //그림자 투명도
-          shadowOffset: {width: 3, height: 3}, //그림자 위치
-          shadowRadius: 3,
+          shadowColor: `${value.shadowColor}`, //그림자색
+          shadowOpacity: value.opacity, //그림자 투명도
+          shadowOffset: {
+            width: value.offset.width,
+            height: value.offset.height,
+          }, //그림자 위치
+          shadowRadius: value.radius,
         },
         android: {
           //ANDROID

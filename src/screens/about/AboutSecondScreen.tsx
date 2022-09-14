@@ -2,6 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import About from '~/components/About';
 import Order from '../../components/Order';
 import color from '../../constants/color';
 
@@ -9,27 +10,25 @@ const AboutSecondScreen = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.block}>
-      <TouchableOpacity
-        style={styles.block}
-        onPress={() => {
-          navigation.navigate('AboutThird');
-        }}>
-        <Image
-          source={require('../../assets/images/about_economy/economy.png')}
-          style={styles.economy}
-          resizeMode="contain"
-        />
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.description}>코빌에서는 친구들과</Text>
-          <View style={styles.row}>
-            <Text style={[styles.description, styles.bold]}>경제활동</Text>
-            <Text style={styles.description}>을 할 수 있어요!</Text>
+      <About next="AboutThird">
+        <View>
+          <Image
+            source={require('../../assets/images/about_economy/economy.png')}
+            style={styles.economy}
+            resizeMode="contain"
+          />
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.description}>코빌에서는 친구들과</Text>
+            <View style={styles.row}>
+              <Text style={[styles.description, styles.bold]}>경제활동</Text>
+              <Text style={styles.description}>을 할 수 있어요!</Text>
+            </View>
           </View>
         </View>
         <View style={styles.orderContainer}>
           <Order current={2} />
         </View>
-      </TouchableOpacity>
+      </About>
     </View>
   );
 };
@@ -37,9 +36,6 @@ const AboutSecondScreen = () => {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    backgroundColor: `${color.white}`,
-    display: 'flex',
-    paddingTop: 50,
   },
   economy: {
     width: '100%',
@@ -66,9 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderContainer: {
-    position: 'absolute',
     width: '100%',
-    bottom: 50,
   },
 });
 

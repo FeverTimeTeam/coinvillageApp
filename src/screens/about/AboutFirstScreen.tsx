@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Order from '../../components/Order';
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
+import About from '~/components/About';
 
 const AboutFirstScreen = () => {
   const navigation = useNavigation();
@@ -18,23 +19,25 @@ const AboutFirstScreen = () => {
           colors={['#FAEB9E', '#FFFFFF']}
           locations={[0, 0.7]}
           style={styles.inner}>
-          <Image
-            source={require('../../assets/images/world.png')}
-            style={styles.world}
-            resizeMode="contain"
-          />
-          <Image
-            source={require('../../assets/images/world_shadow.png')}
-            style={styles.shadow}
-          />
-          <View style={styles.descriptionWrapper}>
-            <Text style={styles.description}>당신의 코인빌리지</Text>
+          <View>
+            <Image
+              source={require('../../assets/images/world.png')}
+              style={styles.world}
+              resizeMode="contain"
+            />
+            <Image
+              source={require('../../assets/images/world_shadow.png')}
+              style={styles.shadow}
+            />
+            <View style={styles.descriptionWrapper}>
+              <Text style={styles.description}>당신의 코인빌리지</Text>
+            </View>
+            <Image
+              resizeMode="center"
+              style={styles.covil}
+              source={require('../../assets/images/covil_text/covil_text.png')}
+            />
           </View>
-          <Image
-            resizeMode="center"
-            style={styles.covil}
-            source={require('../../assets/images/covil_text/covil_text.png')}
-          />
           <View style={styles.orderContainer}>
             <Order current={1} />
           </View>
@@ -51,20 +54,21 @@ const styles = StyleSheet.create({
   inner: {
     flex: 1,
     display: 'flex',
-    paddingTop: 50,
+    justifyContent: 'space-between',
+    paddingVertical: 50,
   },
   world: {
     width: '100%',
     height: 390,
     zIndex: 3,
-    marginBottom: 50,
+    marginBottom: 70,
   },
   shadow: {
     position: 'absolute',
     width: 230,
     height: 139,
     left: 74,
-    top: 360,
+    top: 320,
   },
   descriptionWrapper: {
     width: '100%',
@@ -78,11 +82,10 @@ const styles = StyleSheet.create({
   covil: {
     width: '100%',
     height: 120,
+    // backgroundColor: '#111',
   },
   orderContainer: {
-    position: 'absolute',
     width: '100%',
-    bottom: 50,
   },
 });
 

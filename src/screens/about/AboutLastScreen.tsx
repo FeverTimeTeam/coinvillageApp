@@ -12,7 +12,7 @@ const AboutLastScreen = () => {
       <TouchableOpacity
         style={styles.block}
         onPress={() => {
-          navigation.navigate('AboutSecond');
+          navigation.navigate('AboutFirst');
         }}>
         <LinearGradient
           colors={['#FAEB9E', '#FFFFFF']}

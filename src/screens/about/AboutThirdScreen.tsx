@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import About from '~/components/About';
 import Order from '../../components/Order';
 import color from '../../constants/color';
 
@@ -8,26 +9,24 @@ const AboutThirdScreen = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.block}>
-      <TouchableOpacity
-        style={styles.block}
-        onPress={() => {
-          navigation.navigate('AboutFourth');
-        }}>
-        <Image
-          source={require('../../assets/images/about_job/about_job.png')}
-          style={styles.job}
-          resizeMode="contain"
-        />
-        <View style={styles.descriptionContainer}>
-          <View style={styles.row}>
-            <Text style={[styles.description, styles.bold]}>직업</Text>
-            <Text style={styles.description}>을 가지고</Text>
+      <About next="AboutFourth">
+        <View>
+          <Image
+            source={require('../../assets/images/about_job/about_job.png')}
+            style={styles.job}
+            resizeMode="contain"
+          />
+          <View style={styles.descriptionContainer}>
+            <View style={styles.row}>
+              <Text style={[styles.description, styles.bold]}>직업</Text>
+              <Text style={styles.description}>을 가지고</Text>
+            </View>
           </View>
         </View>
         <View style={styles.orderContainer}>
           <Order current={3} />
         </View>
-      </TouchableOpacity>
+      </About>
     </View>
   );
 };
@@ -35,9 +34,6 @@ const AboutThirdScreen = () => {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    backgroundColor: `${color.white}`,
-    display: 'flex',
-    paddingTop: 50,
   },
   job: {
     width: '100%',
@@ -64,9 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   orderContainer: {
-    position: 'absolute',
     width: '100%',
-    bottom: 50,
   },
 });
 

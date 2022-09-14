@@ -17,6 +17,7 @@ import {useRecoilState} from 'recoil';
 import {savingsPassbookListState} from '../../atoms/savingsPassbook';
 import {myStockListState} from '../../atoms/stock';
 import LoadingScreen from '../../components/LoadingScreen';
+import TotalMoneyView from '~/components/TotalMoneyView';
 
 const StockPassbookScreen = () => {
   const navigation = useNavigation();
@@ -43,13 +44,10 @@ const StockPassbookScreen = () => {
       <View style={styles.marginHorizontal}>
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>
-            <Text style={[styles.textBig]}>
-              총{' '}
-              <Text style={styles.bold}>
-                {myStockList.items[0]?.stockTotal}{' '}
-              </Text>
-              리브
-            </Text>
+            <TotalMoneyView
+              total={myStockList?.items[0]?.stockTotal}
+              backgroundColor={color.light_green2}
+            />
           </View>
         </View>
         <View style={[styles.descriptionText]}>

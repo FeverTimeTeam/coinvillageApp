@@ -12,6 +12,7 @@ import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import {axiosInstance} from '../../queries/index';
+import TotalMoneyView from '~/components/TotalMoneyView';
 
 const StockPassbookWithdrawalScreen = ({route, navigation}) => {
   // const navigation = useNavigation();
@@ -35,9 +36,10 @@ const StockPassbookWithdrawalScreen = ({route, navigation}) => {
       <View>
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>
-            <Text style={[styles.textBig]}>
-              총 <Text style={styles.bold}>{stockTotal} </Text>리브
-            </Text>
+            <TotalMoneyView
+              total={stockTotal}
+              backgroundColor={color.light_green2}
+            />
           </View>
         </View>
         <View>

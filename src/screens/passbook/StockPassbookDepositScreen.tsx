@@ -12,6 +12,7 @@ import PassbookButton from '../../components/PassbookButton';
 import color from '../../constants/color';
 import {useNavigation} from '@react-navigation/native';
 import {axiosInstance} from '../../queries/index';
+import TotalMoneyView from '~/components/TotalMoneyView';
 
 const StockPassbookDepositScreen = ({route, navigation}) => {
   // const navigation = useNavigation();
@@ -34,11 +35,10 @@ const StockPassbookDepositScreen = ({route, navigation}) => {
       keyboardVerticalOffset={statusBarHeight + 44}>
       <View>
         <View style={styles.balanceWrapper}>
-          <View style={[styles.backgroundGreen, styles.balance]}>
-            <Text style={[styles.textBig]}>
-              총 <Text style={styles.bold}>{stockTotal} </Text>리브
-            </Text>
-          </View>
+          <TotalMoneyView
+            total={stockTotal}
+            backgroundColor={color.light_green2}
+          />
         </View>
         <View>
           <Text style={styles.textBig}>얼마를 입금하시겠습니까?</Text>

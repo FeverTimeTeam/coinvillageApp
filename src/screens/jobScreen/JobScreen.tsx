@@ -122,7 +122,8 @@ const JobScreen = () => {
             style={[styles.card, styles.cardBack]}
             onPress={() => this.card.flip()}>
             <Image
-              source={require('../../assets/images/job_icons/base_icon/base_icon.png')}
+              style={styles.jobIcon}
+              source={require('../../assets/images/job_icons/bank/bank.png')}
             />
             <View style={styles.jobDescriptionContainer}>
               <Text style={[styles.text, styles.bold, styles.bigText]}>
@@ -232,6 +233,10 @@ const styles = StyleSheet.create({
     marginTop: 60,
     paddingHorizontal: 39,
     marginBottom: 30,
+  },
+  jobIcon: {
+    width: 256,
+    height: 256,
   },
 });
 

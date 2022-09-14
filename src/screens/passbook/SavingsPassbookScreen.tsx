@@ -20,15 +20,15 @@ import {
 } from '../../atoms/savingsPassbook';
 import LoadingScreen from '~/components/LoadingScreen';
 import TotalMoneyView from '~/components/TotalMoneyView';
+import {maturityMoneyState} from '../../atoms/savingsPassbook';
 
 const SavingsPassbookScreen = () => {
   const navigation = useNavigation();
-  const [totalMoney, setTotalMoney] = useState<number>(0);
   const [savingsPassbookList, setSavingsPassbookList] = useRecoilState(
     savingsPassbookListState,
   );
   const [billSetting, setBillSetting] = useRecoilState(savingsBillState);
-  const [isMaturity, setIsMaturity] = useState<boolean>(true);
+  const [maturityMoney, setMaturityMoney] = useRecoilState(maturityMoneyState);
 
   useEffect(() => {
     const getSavingsPassbookList = () => {
@@ -36,6 +36,12 @@ const SavingsPassbookScreen = () => {
         .get('/savings')
         .then(response => {
           setSavingsPassbookList({items: response.data.reverse()});
+          const tmpMaturityMoney =
+            ((savingsPassbookList?.items[0]?.interest + 100) *
+              billSetting.bill *
+              6) /
+            100;
+          setMaturityMoney(parseInt(tmpMaturityMoney.toFixed(0), 10));
         })
         .catch(e => {
           console.log(e);
@@ -43,10 +49,26 @@ const SavingsPassbookScreen = () => {
     };
 
     getSavingsPassbookList();
-  }, [savingsPassbookList, setSavingsPassbookList]);
+  }, [
+    savingsPassbookList,
+    setSavingsPassbookList,
+    billSetting,
+    setMaturityMoney,
+  ]);
+
+  const postSavings = () => {
+    axiosInstance
+      .post('/savings')
+      .then(response => {
+        console.log(response);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
 
   const [term, setTerm] = useState<string>('매 달 1일');
-  const [moneyUnit, setMoneyUnit] = useState<number>(0);
+
   return (
     <View style={styles.block}>
       <LoadingScreen />
@@ -66,42 +88,34 @@ const SavingsPassbookScreen = () => {
             <TouchableOpacity
               style={styles.settingButton}
               onPress={() => {
-                navigation.navigate('SavingsSetting');
+                navigation.navigate('SavingsSetting', {
+                  interest: savingsPassbookList?.items[0]?.interest,
+                });
               }}>
-              <Image source={require('../../assets/images/setting.png')} />
+              <Image source={require('~/assets/images/setting.png')} />
             </TouchableOpacity>
           </View>
           <View style={styles.billContainer}>
-            <Text style={styles.baseTextSize}>6개월 만기 시 10000 리브</Text>
+            <Text style={styles.baseTextSize}>
+              이자율 {savingsPassbookList?.items[0]?.interest}%
+            </Text>
+            <Text style={styles.baseTextSize}>
+              6개월 만기 시 {maturityMoney} 리브
+            </Text>
           </View>
-          {isMaturity && (
+          {savingsPassbookList?.items[0]?.maturity !== 0 && (
             <View style={styles.buttonWrapper}>
               <PassbookButton
                 textColor={color.apricot}
                 backgroundColor={color.light_apricot}
                 buttonText="만기된 적금 받기"
-                onPress={() => {}}
+                onPress={() => {
+                  postSavings();
+                }}
               />
             </View>
           )}
         </View>
-        {/* <View style={styles.consumeButtonWrapper}>
-          <PassbookButton
-            textColor={color.apricot}
-            backgroundColor={color.light_apricot}
-            buttonText="저축하기"
-            onPress={() => {
-              axiosInstance
-                .post('/savings', {})
-                .then(response => {
-                  console.log(response.data);
-                })
-                .catch(e => {
-                  console.log(e);
-                });
-            }}
-          />
-        </View> */}
         <View style={styles.separatorBar} />
         <FlatList
           style={styles.detailContentList}
@@ -109,12 +123,23 @@ const SavingsPassbookScreen = () => {
           data={savingsPassbookList.items}
           renderItem={({item}) => (
             <View style={styles.detailContentContainer} key={item.savingsId}>
-              <View style={styles.dateContainer}>
-                <Text style={styles.date}>{item.createdAt}</Text>
-              </View>
-              <View style={styles.contentContainer}>
-                <Text style={styles.contentName}>{item.content}</Text>
-                <Text style={[styles.money, styles.deposit]}>{item.total}</Text>
+              <View style={styles.itemContainer}>
+                <View style={styles.dateContentContainer}>
+                  <Text style={styles.date}>{item.createdAt}</Text>
+                  <View style={styles.seperator} />
+                  <Text style={styles.contentName}>{item.content}</Text>
+                </View>
+                <View style={styles.moneyWrapper}>
+                  {item.stateName === 'DEPOSIT' ? (
+                    <Text style={[styles.money, styles.deposit]}>
+                      {item.total}
+                    </Text>
+                  ) : (
+                    <Text style={[styles.money, styles.withdrawal]}>
+                      {item.total}
+                    </Text>
+                  )}
+                </View>
               </View>
             </View>
           )}
@@ -139,6 +164,9 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: 'bold',
+  },
+  seperator: {
+    width: 10,
   },
   installmentContainer: {
     display: 'flex',
@@ -171,35 +199,36 @@ const styles = StyleSheet.create({
   },
   detailContentList: {},
   detailContentContainer: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    marginHorizontal: 9,
     height: 50,
     paddingTop: 10,
     paddingHorizontal: 13,
   },
-  dateContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
   date: {
     color: `${color.system_information}`,
-    fontSize: 12,
   },
-  contentContainer: {
+  itemContainer: {
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    paddingLeft: 16,
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    // backgroundColor: '#111',
+  },
+  dateContentContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   contentName: {
-    width: '70%',
     color: `${color.deep}`,
     fontSize: 18,
     textAlign: 'left',
   },
+  moneyWrapper: {},
   money: {
-    width: '20%',
     fontSize: 23,
     fontWeight: 'bold',
     textAlign: 'right',
@@ -209,27 +238,6 @@ const styles = StyleSheet.create({
   },
   deposit: {
     color: `${color.blue}`,
-  },
-  consumeButtonWrapper: {
-    width: '100%',
-    height: 80,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-  },
-  consumeButton: {
-    width: '100%',
-    height: 64,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: `${color.light_yellow}`,
-    borderRadius: 15,
-  },
-  consumeButtonText: {
-    color: `${color.kb}`,
-    fontSize: 24,
   },
   billContainer: {
     display: 'flex',

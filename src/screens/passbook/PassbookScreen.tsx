@@ -9,24 +9,39 @@ import {
   Image,
   Button,
   ImageBackground,
+  ScrollView,
 } from 'react-native';
 import color from '../../constants/color';
 import {useRecoilState} from 'recoil';
 import {authState} from '../../atoms/auth';
+import ShadowEffect from '~/components/ShadowEffect';
+import {basePassbookListState} from '../../atoms/basePassbook';
 
 const PassbookScreen = () => {
   const navigation = useNavigation();
   const [authUserState, setAuthUserState] = useRecoilState(authState);
+  const [basePassbookList, setBasePassbookList] = useRecoilState(
+    basePassbookListState,
+  );
   return (
-    <View style={styles.block}>
-      <View style={styles.informationTextContainer}>
-        <Text style={styles.informationText}>
-          *월급은 자동으로 입출금 통장에 입금됩니다.
-        </Text>
-        <Text style={styles.informationText}>
-          받은 월급으로 소비, 적금, 투자가 가능합니다.
-        </Text>
-      </View>
+    <ScrollView style={styles.block}>
+      <ShadowEffect>
+        <View style={styles.informationTextContainer}>
+          <Text style={styles.informationText}>
+            *월급은 자동으로 입출금 통장에 입금됩니다.
+          </Text>
+          <Text style={styles.informationText}>
+            받은 월급으로 소비, 적금, 투자가 가능합니다.
+          </Text>
+        </View>
+      </ShadowEffect>
+      <ShadowEffect>
+        <View style={styles.property}>
+          <Text style={styles.propertyText}>
+            {basePassbookList?.items[0]?.property}
+          </Text>
+        </View>
+      </ShadowEffect>
       <Pressable
         style={({pressed}) => [
           styles.passbookButton,
@@ -37,15 +52,19 @@ const PassbookScreen = () => {
         onPress={() => {
           navigation.push('BasePassbook');
         }}>
-        <ImageBackground
-          style={styles.imageBackground}
-          source={require('../../assets/images/savingsAccount.png')}
-          resizeMode="contain">
-          <Text style={[styles.country, {color: color.kb}]}>
-            {authUserState.user?.countryName} 은행
-          </Text>
-          <Text style={styles.username}>{authUserState.user?.nickname}님</Text>
-        </ImageBackground>
+        <ShadowEffect>
+          <ImageBackground
+            style={styles.imageBackground}
+            source={require('../../assets/images/savingsAccount.png')}
+            resizeMode="contain">
+            <Text style={[styles.country, {color: color.kb}]}>
+              {authUserState.user?.countryName} 은행
+            </Text>
+            <Text style={styles.username}>
+              {authUserState.user?.nickname}님
+            </Text>
+          </ImageBackground>
+        </ShadowEffect>
       </Pressable>
       <Pressable
         style={({pressed}) => [
@@ -57,15 +76,19 @@ const PassbookScreen = () => {
         onPress={() => {
           navigation.push('SavingsPassbook');
         }}>
-        <ImageBackground
-          style={styles.imageBackground}
-          source={require('../../assets/images/installmentAccount.png')}
-          resizeMode="contain">
-          <Text style={[styles.country, {color: color.apricot}]}>
-            {authUserState.user?.countryName} 은행
-          </Text>
-          <Text style={styles.username}>{authUserState.user?.nickname}님</Text>
-        </ImageBackground>
+        <ShadowEffect>
+          <ImageBackground
+            style={styles.imageBackground}
+            source={require('../../assets/images/installmentAccount.png')}
+            resizeMode="contain">
+            <Text style={[styles.country, {color: color.apricot}]}>
+              {authUserState.user?.countryName} 은행
+            </Text>
+            <Text style={styles.username}>
+              {authUserState.user?.nickname}님
+            </Text>
+          </ImageBackground>
+        </ShadowEffect>
       </Pressable>
       <Pressable
         style={({pressed}) => [
@@ -77,28 +100,34 @@ const PassbookScreen = () => {
         onPress={() => {
           navigation.push('StockPassbook');
         }}>
-        <ImageBackground
-          style={styles.imageBackground}
-          source={require('../../assets/images/investmentAccount.png')}
-          resizeMode="contain">
-          <Text style={[styles.country, {color: color.light_green}]}>
-            {authUserState.user?.countryName} 은행
-          </Text>
-          <Text style={styles.username}>{authUserState.user?.nickname}님</Text>
-        </ImageBackground>
+        <ShadowEffect>
+          <ImageBackground
+            style={styles.imageBackground}
+            source={require('../../assets/images/investmentAccount.png')}
+            resizeMode="contain">
+            <Text style={[styles.country, {color: color.light_green}]}>
+              {authUserState.user?.countryName} 은행
+            </Text>
+            <Text style={styles.username}>
+              {authUserState.user?.nickname}님
+            </Text>
+          </ImageBackground>
+        </ShadowEffect>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    alignItems: 'center',
+    paddingHorizontal: 16,
     backgroundColor: `${color.white}`,
   },
   passbookButton: {
     marginTop: 15,
+    display: 'flex',
+    alignItems: 'center',
   },
   imageBackground: {
     width: 343,
@@ -107,21 +136,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-end',
     padding: 22,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.black}`, //그림자색
-        shadowOpacity: 0.2, //그림자 투명도
-        shadowOffset: {width: 2, height: 3}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
   },
   country: {
-    // color: `${color.kb}`,
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -134,25 +150,13 @@ const styles = StyleSheet.create({
     height: 10,
   },
   informationTextContainer: {
-    width: '90%',
     height: 80,
     marginTop: 10,
-    paddingLeft: 20,
-    backgroundColor: color.light_gray3,
+    display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: color.light_gray3,
     borderRadius: 15,
-    ...Platform.select({
-      ios: {
-        shadowColor: `${color.black}`, //그림자색
-        shadowOpacity: 0.1, //그림자 투명도
-        shadowOffset: {width: 2, height: 3}, //그림자 위치
-        shadowRadius: 3,
-      },
-      android: {
-        //ANDROID
-        elevation: 3,
-      },
-    }),
   },
   informationText: {
     fontSize: 18,

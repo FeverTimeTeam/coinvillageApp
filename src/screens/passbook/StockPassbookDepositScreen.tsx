@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   NativeModules,
   Platform,
@@ -28,11 +29,26 @@ const StockPassbookDepositScreen = ({route, navigation}) => {
       });
     }
   }, [StatusBarManager]);
+
+  const depositToStockPassbook = () => {
+    axiosInstance
+      .post('/accounts/stock', {
+        total: total,
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
   return (
     <KeyboardAvoidingView
       style={styles.block}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={statusBarHeight + 44}>
+      keyboardVerticalOffset={
+        Platform.OS === 'ios' ? statusBarHeight + 44 : statusBarHeight + 100
+      }>
       <View>
         <View style={styles.balanceWrapper}>
           <TotalMoneyView
@@ -68,17 +84,30 @@ const StockPassbookDepositScreen = ({route, navigation}) => {
             textColor={color.green}
             backgroundColor={color.light_green2}
             onPress={() => {
-              axiosInstance
-                .post('/accounts/stock', {
-                  total: total,
-                })
-                .then(response => {
-                  console.log(response.data);
-                })
-                .catch(e => {
-                  console.log(e);
-                });
-              navigation.pop();
+              Alert.alert(
+                `주식 통장으로 ${total}리브 만큼 입금하시겠습니까?`,
+                '입출금통장에서 출금됩니다.',
+                [
+                  {
+                    text: '입금하기',
+                    onPress: () => {
+                      depositToStockPassbook();
+                      navigation.pop();
+                      Alert.alert('입금 완료!', `${total} 리브 입금`, [
+                        {
+                          text: '확인',
+                          onPress: () => {},
+                        },
+                      ]);
+                    },
+                  },
+                  {
+                    text: '취소하기',
+                    onPress: () => {},
+                    style: 'cancel',
+                  },
+                ],
+              );
             }}
           />
         </View>

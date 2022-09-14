@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 35,
     letterSpacing: 5,
-    marginTop: 104,
+    marginTop: 80,
   },
   jobName: {
     fontSize: 23,

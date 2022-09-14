@@ -42,13 +42,14 @@ const InvestmentSellScreen = ({route, navigation}) => {
         .then(response => {
           console.log(response.data);
           setMyStockDetail({detail: response.data});
+          setTotal(myStockDetail.detail.buyCount * myStockDetail.detail.price);
         })
         .catch(e => {
           console.log(e);
         });
     };
     getMyStockDetail();
-  }, [setMyStockDetail, stockId]);
+  }, [setMyStockDetail, stockId, myStockDetail]);
 
   const sellStock = () => {
     axiosInstance
@@ -108,7 +109,7 @@ const InvestmentSellScreen = ({route, navigation}) => {
                 주
               </Text>
             </View>
-            <View style={styles.amount}>
+            {/* <View style={styles.amount}>
               <TextInput
                 style={styles.input}
                 onChange={e => {
@@ -125,11 +126,11 @@ const InvestmentSellScreen = ({route, navigation}) => {
                 }}
               />
               <Text style={[styles.textSizeBig, styles.fontColor]}>주</Text>
-            </View>
-            <View>
+            </View> */}
+            <View style={[styles.marginHorizontal, styles.marginTop]}>
               <Text
                 style={[styles.total, styles.fontColorRed, styles.textSizeBig]}>
-                총 <Text style={[styles.bold]}>{total} 미소</Text> 차감
+                총 <Text style={[styles.bold]}>{total} 리브</Text>
               </Text>
             </View>
             <PassbookButton
@@ -138,15 +139,15 @@ const InvestmentSellScreen = ({route, navigation}) => {
               backgroundColor={color.kb}
               onPress={() => {
                 Alert.alert(
-                  `${myStockDetail.detail?.content} ${count}주 판매하시겠습니까?`,
-                  `총 ${total} 미소`,
+                  `${myStockDetail.detail?.content} ${myStockDetail.detail.buyCount}주 판매하시겠습니까?`,
+                  `총 ${total} 리브`,
                   [
                     {
                       text: '팔기',
                       onPress: () => {
                         sellStock();
                         // getMyStockList();
-                        Alert.alert('판매 완료!', `총 ${total} 미소`, [
+                        Alert.alert('판매 완료!', `총 ${total} 리브`, [
                           {
                             text: '확인',
                             onPress: () => {
@@ -185,6 +186,9 @@ const styles = StyleSheet.create({
   },
   marginHorizontal: {
     marginHorizontal: 16,
+  },
+  marginTop: {
+    marginTop: 16,
   },
   textSizeSmall: {
     fontSize: 16,

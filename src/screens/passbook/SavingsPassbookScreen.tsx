@@ -28,6 +28,7 @@ const SavingsPassbookScreen = () => {
     savingsPassbookListState,
   );
   const [billSetting, setBillSetting] = useRecoilState(savingsBillState);
+  const [isMaturity, setIsMaturity] = useState<boolean>(true);
 
   useEffect(() => {
     const getSavingsPassbookList = () => {
@@ -44,7 +45,7 @@ const SavingsPassbookScreen = () => {
     getSavingsPassbookList();
   }, [savingsPassbookList, setSavingsPassbookList]);
 
-  const [term, setTerm] = useState<string>('매월 1일');
+  const [term, setTerm] = useState<string>('매 달 1일');
   const [moneyUnit, setMoneyUnit] = useState<number>(0);
   return (
     <View style={styles.block}>
@@ -55,11 +56,12 @@ const SavingsPassbookScreen = () => {
             <Text style={[styles.bold, styles.baseTextSize]}>저축내역</Text>
             <TotalMoneyView
               total={savingsPassbookList?.items[0]?.savingsTotal}
+              backgroundColor={color.light_apricot}
             />
           </View>
           <View style={styles.moneyUnitSettingContainer}>
             <Text style={[styles.baseTextSize, styles.termText]}>
-              매 달 {billSetting.bill} 리브씩
+              {term} {billSetting.bill} 리브씩 저금중
             </Text>
             <TouchableOpacity
               style={styles.settingButton}
@@ -72,6 +74,16 @@ const SavingsPassbookScreen = () => {
           <View style={styles.billContainer}>
             <Text style={styles.baseTextSize}>6개월 만기 시 10000 리브</Text>
           </View>
+          {isMaturity && (
+            <View style={styles.buttonWrapper}>
+              <PassbookButton
+                textColor={color.apricot}
+                backgroundColor={color.light_apricot}
+                buttonText="만기된 적금 받기"
+                onPress={() => {}}
+              />
+            </View>
+          )}
         </View>
         {/* <View style={styles.consumeButtonWrapper}>
           <PassbookButton
@@ -132,13 +144,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'space-evenly',
     flexDirection: 'column',
-    height: 150,
-    paddingLeft: 35,
-    paddingHorizontal: 13,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   totalMoneyContainer: {
     marginTop: 15,
-    height: 35,
+    marginBottom: 25,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -225,6 +236,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    marginTop: 15,
+  },
+  buttonWrapper: {
     marginTop: 15,
   },
 });

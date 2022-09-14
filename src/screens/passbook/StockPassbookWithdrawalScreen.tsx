@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   NativeModules,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -28,11 +30,27 @@ const StockPassbookWithdrawalScreen = ({route, navigation}) => {
       });
     }
   }, [StatusBarManager]);
+
+  const withdrawalFromStockPassbook = () => {
+    axiosInstance
+      .post('/stocks/transfer', {
+        price: total,
+      })
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.block}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={statusBarHeight + 44}>
+      keyboardVerticalOffset={
+        Platform.OS === 'ios' ? statusBarHeight + 44 : statusBarHeight + 100
+      }>
       <View>
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>
@@ -70,17 +88,30 @@ const StockPassbookWithdrawalScreen = ({route, navigation}) => {
             textColor={color.green}
             backgroundColor={color.light_green2}
             onPress={() => {
-              axiosInstance
-                .post('/stocks/transfer', {
-                  price: total,
-                })
-                .then(response => {
-                  console.log(response.data);
-                })
-                .catch(e => {
-                  console.log(e);
-                });
-              navigation.pop();
+              Alert.alert(
+                `입출금 통장으로 ${total}리브 만큼 이체하시겠습니까?`,
+                '주식 통장에서 출금됩니다.',
+                [
+                  {
+                    text: '이체하기',
+                    onPress: () => {
+                      withdrawalFromStockPassbook();
+                      navigation.pop();
+                      Alert.alert('이체 완료!', `${total} 리브 이체`, [
+                        {
+                          text: '확인',
+                          onPress: () => {},
+                        },
+                      ]);
+                    },
+                  },
+                  {
+                    text: '취소하기',
+                    onPress: () => {},
+                    style: 'cancel',
+                  },
+                ],
+              );
             }}
           />
         </View>

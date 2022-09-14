@@ -33,15 +33,21 @@ const PassbookScreen = () => {
       </View>
       <ShadowEffect shadowColor={color.warm_gray1}>
         <View style={styles.propertyContainer}>
-          <View style={styles.title}>
-            <Text>나의 총 재산</Text>
-          </View>
-          <View style={styles.property}>
-            <ShadowEffect>
-              <Text style={styles.propertyText}>
-                {authUser.user?.property} 리브
-              </Text>
-            </ShadowEffect>
+          <Image
+            style={styles.coin}
+            source={require('~/assets/images/job_icons/bank/bank.png')}
+          />
+          <View>
+            <View style={styles.title}>
+              <Text>나의 총 재산</Text>
+            </View>
+            <View style={styles.property}>
+              <ShadowEffect>
+                <Text style={styles.propertyText}>
+                  {authUser.user?.property} 리브
+                </Text>
+              </ShadowEffect>
+            </View>
           </View>
         </View>
       </ShadowEffect>
@@ -109,14 +115,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: `${color.white}`,
   },
+  coin: {},
   passbookButton: {
-    marginTop: 15,
+    marginTop: 10,
     display: 'flex',
     alignItems: 'center',
   },
   imageBackground: {
-    width: 343,
-    height: 178,
+    // width: 343,
+    // height: 178,
+    width: 330,
+    height: 180,
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-end',
@@ -135,6 +144,7 @@ const styles = StyleSheet.create({
     height: 10,
   },
   informationTextContainer: {
+    marginHorizontal: 10,
     height: 60,
     marginTop: 10,
     display: 'flex',
@@ -147,14 +157,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   propertyContainer: {
+    marginHorizontal: 10,
     marginTop: 10,
     display: 'flex',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
     borderRadius: 15,
     backgroundColor: `${color.kb}`,
-    paddingHorizontal: 22,
-    paddingVertical: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
   },
   title: {
     display: 'flex',

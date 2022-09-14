@@ -112,9 +112,7 @@ const JobScreen = () => {
             </Text>
             <View style={styles.settingButtonWrapper}>
               <TouchableOpacity onPress={onSelectImage}>
-                <Image
-                  source={require('../../assets/images/setting_white.png')}
-                />
+                <Image source={require('~/assets/images/setting_white.png')} />
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
@@ -123,7 +121,7 @@ const JobScreen = () => {
             onPress={() => this.card.flip()}>
             <Image
               style={styles.jobIcon}
-              source={require('../../assets/images/job_icons/bank/bank.png')}
+              source={require('~/assets/images/job_icons/bank/bank.png')}
             />
             <View style={styles.jobDescriptionContainer}>
               <Text style={[styles.text, styles.bold, styles.bigText]}>
@@ -143,16 +141,16 @@ const JobScreen = () => {
                 리브
               </Text>
             </View>
-            <View style={styles.settingButtonWrapper}>
+            {/* <View style={styles.settingButtonWrapper}>
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate('SelectJobIcon');
                 }}>
                 <Image
-                  source={require('../../assets/images/select_icon/select_icon.png')}
+                  source={require('~/assets/images/select_icon/select_icon.png')}
                 />
               </TouchableOpacity>
-            </View>
+            </View> */}
           </TouchableOpacity>
         </CardFlip>
       </ShadowEffect>

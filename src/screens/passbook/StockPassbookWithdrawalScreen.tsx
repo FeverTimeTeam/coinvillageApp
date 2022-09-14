@@ -68,16 +68,16 @@ const StockPassbookWithdrawalScreen = ({route, navigation}) => {
             textColor={color.green}
             backgroundColor={color.light_green2}
             onPress={() => {
-              // axiosInstance
-              //   .post('/accounts/stock', {
-              //     total: total,
-              //   })
-              //   .then(response => {
-              //     console.log(response.data);
-              //   })
-              //   .catch(e => {
-              //     console.log(e);
-              //   });
+              axiosInstance
+                .post('/stocks/transfer', {
+                  price: total,
+                })
+                .then(response => {
+                  console.log(response.data);
+                })
+                .catch(e => {
+                  console.log(e);
+                });
               navigation.pop();
             }}
           />

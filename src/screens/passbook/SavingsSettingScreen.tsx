@@ -12,36 +12,33 @@ import color from '../../constants/color';
 import ModalSelector from 'react-native-modal-selector';
 import {axiosInstance} from '../../queries';
 import {useRecoilState} from 'recoil';
-import {savingsBillState} from '../../atoms/savingsPassbook';
+import {
+  savingsBillState,
+  maturityMoneyState,
+} from '../../atoms/savingsPassbook';
 import PassbookButton from '../../components/PassbookButton';
 import {useNavigation} from '@react-navigation/native';
 
-const SavingsSettingScreen = () => {
-  const navigation = useNavigation();
-  const [weekMoney, setWeekMoney] = useState<number>(0);
-  // const [monthMoney, setMonthMoney] = useState<number>(0);
-  let index = 0;
-  const data = [
-    {key: index++, label: '월요일'},
-    {key: index++, label: '화요일'},
-    {key: index++, label: '수요일'},
-    {key: index++, label: '목요일'},
-    {key: index++, label: '금요일'},
-  ];
+const SavingsSettingScreen = ({route, navigation}) => {
+  // const navigation = useNavigation();
+  const {interest} = route.params;
+  const [maturityMoney, setMaturityMoney] = useRecoilState(maturityMoneyState);
+  const [tmpMaturityMoney, setTmpMaturityMoney] = useState(0);
 
-  const [radioSelected, setRadioSelected] = useState<'week' | 'month'>('week');
-
+  const [billInput, setBillInput] = useState(0);
   const [billSetting, setBillSetting] = useRecoilState(savingsBillState);
+
   const postSavingsSetting = () => {
     axiosInstance
-      .put('/savings', {
-        bill: billSetting.bill,
+      .put('/savings/change', {
+        bill: billInput,
       })
       .then(response => {
         console.log(response.data);
+        setBillSetting({bill: response.data.bill});
         Alert.alert(
           '적용되었습니다!',
-          `매 달 ${billSetting.bill} 리브씩 저금됩니다.`,
+          `매 달 ${billInput} 리브씩 저금합니다.`,
           [
             {
               text: '확인',
@@ -60,25 +57,27 @@ const SavingsSettingScreen = () => {
     <View style={styles.block}>
       <View style={styles.termContainer}>
         <Text style={styles.currentText}>현재</Text>
-        <Text style={styles.termText}>매 달 1일, {billSetting.bill} 리브</Text>
+        <Text style={styles.termText}>매 달 1일, {billInput} 리브</Text>
       </View>
-      <View style={styles.infoWrapper}>
+      {/* <View style={styles.infoWrapper}>
         <Text style={styles.infoText}>
           * 설정 / 변경 시 다음 달부터 적용됩니다.
         </Text>
-      </View>
+      </View> */}
 
       <View style={styles.billContainer}>
         <Text style={styles.selectText}>매달</Text>
         <TextInput
           style={[styles.input, styles.moneyInput]}
-          value={billSetting.bill.toString()}
+          value={billInput.toString()}
           onChange={e => {
             const tmpMoney = parseInt(e.nativeEvent.text);
             if (!isNaN(tmpMoney)) {
-              setBillSetting({bill: tmpMoney});
+              setBillInput(tmpMoney);
+              const tmpMaturity = ((interest + 100) * tmpMoney * 6) / 100;
+              setTmpMaturityMoney(parseInt(tmpMaturity.toFixed(0), 10));
             } else if (e.nativeEvent.text === '') {
-              setBillSetting({bill: 0});
+              setBillInput(0);
             } else {
               console.log('숫자만 입력');
             }
@@ -88,7 +87,9 @@ const SavingsSettingScreen = () => {
       </View>
 
       <View style={styles.billContainer}>
-        <Text style={styles.selectText}>6개월 만기 시 10000 리브</Text>
+        <Text style={styles.selectText}>
+          6개월 만기 시 {tmpMaturityMoney} 리브
+        </Text>
       </View>
       <View style={styles.separatorBar} />
       <View style={styles.buttonWrapper}>

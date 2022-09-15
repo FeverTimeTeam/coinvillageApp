@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -16,10 +16,27 @@ import {useRecoilState} from 'recoil';
 import {authState} from '../../atoms/auth';
 import ShadowEffect from '~/components/ShadowEffect';
 import {basePassbookListState} from '../../atoms/basePassbook';
+import {propertyState} from '~/atoms/property';
+import {axiosInstance} from '../../queries/index';
 
 const PassbookScreen = () => {
   const navigation = useNavigation();
   const [authUser, setAuthUser] = useRecoilState(authState);
+  const [property, setProperty] = useRecoilState(propertyState);
+
+  useEffect(() => {
+    const getProperty = () => {
+      axiosInstance
+        .get('/members/property')
+        .then(response => {
+          setProperty(response.data.property);
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getProperty();
+  }, [setProperty]);
 
   return (
     <ScrollView style={styles.block}>
@@ -43,9 +60,7 @@ const PassbookScreen = () => {
             </View>
             <View style={styles.property}>
               <ShadowEffect>
-                <Text style={styles.propertyText}>
-                  {authUser.user?.property} 리브
-                </Text>
+                <Text style={styles.propertyText}>{property} 리브</Text>
               </ShadowEffect>
             </View>
           </View>

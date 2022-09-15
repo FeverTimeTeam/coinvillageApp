@@ -144,7 +144,7 @@ const ConsumeScreen = () => {
       <View style={styles.consumeButtonContainer}>
         <View style={styles.separatorBar} />
         <Text style={styles.totalPrice}>
-          총 <Text style={styles.bold}>{item?.total}</Text>미소 차감
+          총 <Text style={styles.bold}>{item?.total}</Text>리브 차감
         </Text>
         <PassbookButton
           style={styles.buyButton}
@@ -152,7 +152,7 @@ const ConsumeScreen = () => {
           onPress={() => {
             Alert.alert(
               `${content}를 ${count}개 구매하시겠습니까?`,
-              `총 ${total} 미소 차감`,
+              `총 ${total} 리브 차감`,
               [
                 {
                   text: '구매하기',

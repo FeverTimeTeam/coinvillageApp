@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   NativeModules,
   Alert,
+  ScrollView,
 } from 'react-native';
 import {axiosInstance} from '../queries/index';
 import {useNavigation} from '@react-navigation/native';
@@ -83,7 +84,7 @@ const LoginScreen = () => {
     <KeyboardAvoidingView
       style={styles.block}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={statusBarHeight + 44}>
+      keyboardVerticalOffset={statusBarHeight}>
       <View style={styles.covilContainer}>
         <Image
           style={styles.covilImage}
@@ -91,49 +92,51 @@ const LoginScreen = () => {
         />
         <Text style={styles.covilDescription}>당신의 코인 빌리지</Text>
       </View>
-      <View style={styles.form}>
-        <View>
-          <Text style={styles.inputTitle}>아이디</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="이메일 입력"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-          />
-          <Text style={styles.inputTitle}>비밀번호</Text>
-          <TextInput
-            style={styles.input}
-            secureTextEntry={true}
-            placeholder="비밀번호 입력"
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => {
-            login();
-            setEmail('');
-            setPassword('');
-          }}>
-          <Text style={styles.loginText}>{loginButtonText}</Text>
-        </TouchableOpacity>
-        <View style={styles.signupContainer}>
-          <Text style={styles.signUpDescriptionText}>
-            아직 회원이 아니신가요?
-          </Text>
+      <ScrollView>
+        <View style={styles.form}>
+          <View>
+            <Text style={styles.inputTitle}>아이디</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="이메일 입력"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <Text style={styles.inputTitle}>비밀번호</Text>
+            <TextInput
+              style={styles.input}
+              secureTextEntry={true}
+              placeholder="비밀번호 입력"
+              value={password}
+              onChangeText={setPassword}
+            />
+          </View>
           <TouchableOpacity
+            style={styles.loginButton}
             onPress={() => {
-              navigation.navigate('SignUp');
+              login();
               setEmail('');
               setPassword('');
             }}>
-            <Text style={styles.signUpText}> 회원가입하기</Text>
+            <Text style={styles.loginText}>{loginButtonText}</Text>
           </TouchableOpacity>
+          <View style={styles.signupContainer}>
+            <Text style={styles.signUpDescriptionText}>
+              아직 회원이 아니신가요?
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('SignUp');
+                setEmail('');
+                setPassword('');
+              }}>
+              <Text style={styles.signUpText}> 회원가입하기</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

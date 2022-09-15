@@ -25,7 +25,7 @@ const SignUpScreen = () => {
         setStatusBarHeight(statusBarFrameData.height);
       });
     }
-  }, []);
+  }, [StatusBarManager]);
 
   type Nation = {
     authority: [

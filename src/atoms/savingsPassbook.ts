@@ -38,7 +38,7 @@ export const maturityMoneyState = atom<number>({
   default: 0,
 });
 
-// export const isMaturityState = atom<boolean>({
-//   key: 'isMaturityState',
-//   default: false,
-// });
+export const interestState = atom<number>({
+  key: 'interestState',
+  default: 0,
+});

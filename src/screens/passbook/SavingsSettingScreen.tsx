@@ -59,11 +59,6 @@ const SavingsSettingScreen = ({route, navigation}) => {
         <Text style={styles.currentText}>현재</Text>
         <Text style={styles.termText}>매 달 1일, {billInput} 리브</Text>
       </View>
-      {/* <View style={styles.infoWrapper}>
-        <Text style={styles.infoText}>
-          * 설정 / 변경 시 다음 달부터 적용됩니다.
-        </Text>
-      </View> */}
 
       <View style={styles.billContainer}>
         <Text style={styles.selectText}>매달</Text>
@@ -71,13 +66,14 @@ const SavingsSettingScreen = ({route, navigation}) => {
           style={[styles.input, styles.moneyInput]}
           value={billInput.toString()}
           onChange={e => {
-            const tmpMoney = parseInt(e.nativeEvent.text);
+            const tmpMoney = parseInt(e.nativeEvent.text, 10);
             if (!isNaN(tmpMoney)) {
               setBillInput(tmpMoney);
               const tmpMaturity = ((interest + 100) * tmpMoney * 6) / 100;
               setTmpMaturityMoney(parseInt(tmpMaturity.toFixed(0), 10));
             } else if (e.nativeEvent.text === '') {
               setBillInput(0);
+              setTmpMaturityMoney(0);
             } else {
               console.log('숫자만 입력');
             }
@@ -88,7 +84,12 @@ const SavingsSettingScreen = ({route, navigation}) => {
 
       <View style={styles.billContainer}>
         <Text style={styles.selectText}>
-          6개월 만기 시 {tmpMaturityMoney} 리브
+          이자율{' '}
+          <Text style={{fontWeight: 'bold', color: `${color.apricot}`}}>
+            {interest}%
+          </Text>
+          , 6개월 만기 시{' '}
+          <Text style={{fontWeight: 'bold'}}>{tmpMaturityMoney}</Text> 리브
         </Text>
       </View>
       <View style={styles.separatorBar} />
@@ -102,106 +103,6 @@ const SavingsSettingScreen = ({route, navigation}) => {
           }}
         />
       </View>
-      {/* <View style={styles.radioListContainer}>
-        <View style={styles.radioContainer}>
-          <View style={styles.radioButtonContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                setRadioSelected('week');
-              }}>
-              {radioSelected === 'week' ? (
-                <Image
-                  style={styles.radioButton}
-                  source={require('../../assets/images/radio_active.png')}
-                />
-              ) : (
-                <Image
-                  style={styles.radioButton}
-                  source={require('../../assets/images/radio_inactive.png')}
-                />
-              )}
-            </TouchableOpacity>
-            <Text style={styles.selectText}>매주 (일주일 단위)</Text>
-          </View>
-          {radioSelected === 'week' && (
-            <View style={styles.selectContentContainer}>
-              <ModalSelector
-                style={styles.select}
-                data={data}
-                initValue="요일 선택"
-                onChange={option => {
-                  console.log(`${option.label}을 선택하셨습니다.`);
-                }}
-              />
-              <Text style={styles.selectText}>금액</Text>
-              <TextInput
-                style={[styles.input, styles.moneyInput]}
-                value={weekMoney.toString()}
-                onChange={e => {
-                  const tmpMoney = parseInt(e.nativeEvent.text);
-                  if (!isNaN(tmpMoney)) {
-                    setWeekMoney(tmpMoney);
-                  } else if (e.nativeEvent.text === '') {
-                    setWeekMoney(0);
-                  } else {
-                    console.log('숫자만 입력');
-                  }
-                }}
-              />
-              <Text style={styles.selectText}>리브씩</Text>
-            </View>
-          )}
-        </View>
-        <View style={styles.radioContainer}>
-          <View style={styles.radioButtonContainer}>
-            <TouchableOpacity
-              onPress={() => {
-                setRadioSelected('month');
-              }}>
-              {radioSelected === 'month' ? (
-                <Image
-                  style={styles.radioButton}
-                  source={require('../../assets/images/radio_active.png')}
-                />
-              ) : (
-                <Image
-                  style={styles.radioButton}
-                  source={require('../../assets/images/radio_inactive.png')}
-                />
-              )}
-            </TouchableOpacity>
-            <Text style={styles.selectText}>매월 (한 달 단위)</Text>
-          </View>
-          {radioSelected === 'month' && (
-            <View style={styles.selectContentContainer}>
-              <ModalSelector
-                style={styles.select}
-                data={data}
-                initValue="날짜 선택"
-                onChange={option => {
-                  console.log(`${option.label}을 선택하셨습니다.`);
-                }}
-              />
-              <Text style={styles.selectText}>금액</Text>
-              <TextInput
-                style={[styles.input, styles.moneyInput]}
-                value={monthMoney.toString()}
-                onChange={e => {
-                  const tmpMoney = parseInt(e.nativeEvent.text);
-                  if (!isNaN(tmpMoney)) {
-                    setMonthMoney(tmpMoney);
-                  } else if (e.nativeEvent.text === '') {
-                    setMonthMoney(0);
-                  } else {
-                    console.log('숫자만 입력');
-                  }
-                }}
-              />
-              <Text style={styles.selectText}>리브씩</Text>
-            </View>
-          )}
-        </View>
-      </View> */}
     </View>
   );
 };
@@ -243,23 +144,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: `${color.warm_gray1}`,
   },
-  radioListContainer: {
-    marginHorizontal: 16,
-  },
-  radioContainer: {
-    display: 'flex',
-  },
-  radioButtonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 24,
-  },
-  radioButton: {
-    marginRight: 12,
-  },
   selectText: {
-    fontSize: 18,
+    fontSize: 20,
   },
   selectContentContainer: {
     marginTop: 16,

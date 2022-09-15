@@ -17,6 +17,7 @@ import {
   savingsPassbookListState,
   SavingsPassbook,
   savingsBillState,
+  interestState,
 } from '../../atoms/savingsPassbook';
 import LoadingScreen from '~/components/LoadingScreen';
 import TotalMoneyView from '~/components/TotalMoneyView';
@@ -29,6 +30,25 @@ const SavingsPassbookScreen = () => {
   );
   const [billSetting, setBillSetting] = useRecoilState(savingsBillState);
   const [maturityMoney, setMaturityMoney] = useRecoilState(maturityMoneyState);
+  const [interest, setInterest] = useRecoilState(interestState);
+
+  useEffect(() => {
+    const getInterest = () => {
+      axiosInstance
+        .get('/savings/interest')
+        .then(response => {
+          console.log(response.data.interest);
+          setInterest(response.data.interest);
+          const tmpMaturityMoney =
+            ((response.data.interest + 100) * billSetting.bill * 6) / 100;
+          setMaturityMoney(parseInt(tmpMaturityMoney.toFixed(0), 10));
+        })
+        .catch(e => {
+          console.log(e);
+        });
+    };
+    getInterest();
+  }, [setInterest, billSetting.bill, setMaturityMoney]);
 
   useEffect(() => {
     const getSavingsPassbookList = () => {
@@ -36,12 +56,6 @@ const SavingsPassbookScreen = () => {
         .get('/savings')
         .then(response => {
           setSavingsPassbookList({items: response.data.reverse()});
-          const tmpMaturityMoney =
-            ((savingsPassbookList?.items[0]?.interest + 100) *
-              billSetting.bill *
-              6) /
-            100;
-          setMaturityMoney(parseInt(tmpMaturityMoney.toFixed(0), 10));
         })
         .catch(e => {
           console.log(e);
@@ -89,7 +103,7 @@ const SavingsPassbookScreen = () => {
               style={styles.settingButton}
               onPress={() => {
                 navigation.navigate('SavingsSetting', {
-                  interest: savingsPassbookList?.items[0]?.interest,
+                  interest: interest,
                 });
               }}>
               <Image source={require('~/assets/images/setting.png')} />
@@ -97,7 +111,10 @@ const SavingsPassbookScreen = () => {
           </View>
           <View style={styles.billContainer}>
             <Text style={styles.baseTextSize}>
-              이자율 {savingsPassbookList?.items[0]?.interest}%
+              이자율{' '}
+              <Text style={{fontWeight: 'bold', color: `${color.apricot}`}}>
+                {interest}%
+              </Text>
             </Text>
             <Text style={styles.baseTextSize}>
               6개월 만기 시 {maturityMoney} 리브

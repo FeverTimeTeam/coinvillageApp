@@ -32,7 +32,7 @@ const StockPassbookScreen = () => {
           console.log(response.data);
           setMyStockList({items: response.data});
           if (myStockList) {
-            setTotal(myStockList.items[0].stockTotal);
+            setTotal(myStockList?.items[0]?.stockTotal);
           }
         })
         .catch(e => {
@@ -49,7 +49,7 @@ const StockPassbookScreen = () => {
         <View style={styles.balanceWrapper}>
           <View style={[styles.backgroundGreen, styles.balance]}>
             <TotalMoneyView
-              total={myStockList?.items[0]?.stockTotal}
+              total={total}
               backgroundColor={color.light_green2}
             />
           </View>
@@ -81,7 +81,7 @@ const StockPassbookScreen = () => {
               borderColor={color.light_green2}
               onPress={() => {
                 navigation.navigate('StockPassbookDeposit', {
-                  stockTotal: myStockList.items[0]?.stockTotal,
+                  stockTotal: myStockList?.items[0]?.stockTotal,
                 });
               }}
             />

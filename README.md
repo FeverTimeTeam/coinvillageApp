@@ -1,4 +1,7 @@
-# 코빌 앱 소개
+1. [코빌 서비스 소개](#코빌_서비스_소개)
+2. [기술 소개](#기술_소개)
+
+# 코빌 서비스 소개
 <img src="https://user-images.githubusercontent.com/87538540/190533767-bc4b0940-81dd-4520-9eb0-4652ae7f4555.png" />
 <img src="https://user-images.githubusercontent.com/87538540/190533813-0fec501f-3491-42ac-8b57-9094141985c1.png" />
 <img src="https://user-images.githubusercontent.com/87538540/190533984-73c1743f-e4cc-4c10-8ba0-b858ba854d80.png" />
